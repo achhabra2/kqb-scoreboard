@@ -9,7 +9,6 @@
 *~
 *.orig
 *.rej
-*.exe
 .*.swp
 core
 *.cgo*.go

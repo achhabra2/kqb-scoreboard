@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 // Scoreboard defines the data structure for the home team and away team
 type Scoreboard struct {
 	Home      *Team
@@ -18,8 +20,8 @@ func (s *Scoreboard) IncrementHome() {
 		s.AwayMaps = 0
 		s.HomeGames++
 	}
-	// fmt.Printf("Scoreboard Update: %s Won Map\n", s.home.Name)
-	// fmt.Printf("%s: %d Games %d Maps\n", s.home.Name, s.homeGames, s.homeMaps)
+	log.Printf("Scoreboard Update: %s Won Map\n", s.Home.Name)
+	log.Printf("%s: %d Games %d Maps\n", s.Home.Name, s.HomeGames, s.HomeMaps)
 }
 
 // DecrementHome accounts for an error in scoring
@@ -37,8 +39,8 @@ func (s *Scoreboard) IncrementAway() {
 		s.AwayMaps = 0
 		s.AwayGames++
 	}
-	// fmt.Printf("Scoreboard Update: %s Won Map\n", s.away.Name)
-	// fmt.Printf("%s: %d Games %d Maps\n", s.away.Name, s.awayGames, s.awayMaps)
+	log.Printf("Scoreboard Update: %s Won Map\n", s.Away.Name)
+	log.Printf("%s: %d Games %d Maps\n", s.Away.Name, s.AwayGames, s.AwayMaps)
 }
 
 // DecrementAway accounts for an error in scoring

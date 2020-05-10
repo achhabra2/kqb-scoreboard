@@ -13,7 +13,6 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/joho/godotenv"
 	"github.com/manifoldco/promptui"
 )
 
@@ -39,7 +38,7 @@ type Stats struct {
 }
 
 func setupLogs() {
-	f, err := os.OpenFile("./test.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
+	f, err := os.OpenFile("./output.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		fmt.Printf("error opening file: %v", err)
 	}
@@ -53,22 +52,28 @@ func setupLogs() {
 
 func main() {
 	setupLogs()
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 	var wg sync.WaitGroup
 	wg.Add(1)
 	StartHTTPServer()
 	SetupCloseHandler()
 	apiUrl, _ := PromptIglCircuit()
 	teams := GetTeamInfo(apiUrl)
-	home, _ := PromptTeam("Home", teams)
-	away, _ := PromptTeam("Away", teams)
+	home, err := PromptTeam("Home", teams)
+	if err != nil {
+		os.Exit(0)
+	}
+	away, err := PromptTeam("Away", teams)
+	if err != nil {
+		os.Exit(0)
+	}
 	s := Scoreboard{&home, &away, 0, 0, 0, 0}
 	UpdateScoreBoard(&s)
 	for s.HomeGames < 3 && s.AwayGames < 3 {
-		RecordMapScore(&s)
+		err := RecordMapScore(&s)
+		// Allow exit out if prompt errors out
+		if err != nil {
+			os.Exit(0)
+		}
 		UpdateScoreBoard(&s)
 	}
 	wg.Wait()
@@ -171,14 +176,14 @@ func PromptTeam(name string, teams []Team) (Team, error) {
 	i, _, err := prompt.Run()
 
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		return Team{}, nil
+		log.Printf("Prompt failed %v\n", err)
+		return Team{}, errors.New("Map Score Prompt Failed")
 	}
 	return teams[i], nil
 }
 
 // RecordMapScore
-func RecordMapScore(s *Scoreboard) {
+func RecordMapScore(s *Scoreboard) error {
 	// Any type can be given to the select's item as long as the templates properly implement the dot notation
 	// to display it.
 	type MapWinPrompt struct {
@@ -215,10 +220,10 @@ func RecordMapScore(s *Scoreboard) {
 	}
 
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		return
+		log.Printf("Map Score Prompt failed %v\n", err)
+		return errors.New("Map Score Prompt Failed")
 	}
-	return
+	return nil
 }
 
 func SetupCloseHandler() {
