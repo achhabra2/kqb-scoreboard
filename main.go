@@ -13,12 +13,13 @@ import (
 	"sync"
 	"syscall"
 
+	"github.com/joho/godotenv"
 	"github.com/manifoldco/promptui"
 )
 
-const iglWestId = "5e4c6b5178d46abdfeb49e71"
-const iglEastId = "5e4b295560f132acbb31b8f5"
-const iglAPIUrl = "https://indy-gaming-league-api.herokuapp.com/api/circuits/"
+// const iglWestId = "5e4c6b5178d46abdfeb49e71"
+// const iglEastId = "5e4b295560f132acbb31b8f5"
+// const iglAPIUrl = "https://indy-gaming-league-api.herokuapp.com/api/circuits/"
 
 type Team struct {
 	Name  string
@@ -42,7 +43,7 @@ func setupLogs() {
 	}
 
 	// don't forget to close it
-	// defer f.Close()
+	defer f.Close()
 
 	// assign it to the standard logger
 	log.SetOutput(f)
@@ -50,6 +51,10 @@ func setupLogs() {
 
 func main() {
 	setupLogs()
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	var wg sync.WaitGroup
 	wg.Add(1)
 	StartHTTPServer()
@@ -123,6 +128,10 @@ func PromptIglCircuit() (string, error) {
 		return "", errors.New("Invalid Team Selection")
 	}
 	var url string
+
+	iglAPIUrl := os.Getenv("IGLAPIURL")
+	iglEastId := os.Getenv("IGLEASTID")
+	iglWestId := os.Getenv("IGLWESTID")
 	if i == 0 {
 		url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", iglAPIUrl, iglEastId)
 	} else {

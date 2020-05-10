@@ -69,5 +69,5 @@ func StartHTTPServer() {
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	}()
-	fmt.Println("Starting HTTP Server @ localhost:8080")
+	fmt.Println("Starting HTTP Server @ http://localhost:8080")
 }
