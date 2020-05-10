@@ -20,9 +20,15 @@ Unless you have the developer terminal on windows some parts of the app will not
 - *L = Page Up*
 - *Enter = Select*
 
+### ALPHA LIMITATIONS
+Note during this alpha phase there may be bugs and minor issues you run into, here is a list of current known issues: 
+1. No way to subtract from scores - so please make sure you record map results correctly
+2. Dark mode not working - currently the score boxes have a white background, looking to correctly implement a dark mode
+3. Windows keybinding and display issues as per above
+
 
 ## Screen Shots and Demo
-See the [Demo Video](https://www.youtube.com/watch?v=MoYvcVgOC2Y) for an idea of how it works. 
+See the [Demo Video](https://www.youtube.com/watch?v=em6KXidrXVI) for an idea of how it works. 
 
 ![Screen Shot 1](/screenshots/scoreboard-ss-1.png)
 ![Screen Shot 2](/screenshots/scoreboard-ss-2.png)
