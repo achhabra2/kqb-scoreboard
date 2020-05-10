@@ -131,7 +131,7 @@ func PromptIglCircuit() (string, error) {
 	return url, nil
 }
 
-// PromptTeamNew fdsafds
+// PromptTeam
 func PromptTeam(name string, teams []Team) (Team, error) {
 	// Any type can be given to the select's item as long as the templates properly implement the dot notation
 	// to display it.
@@ -169,7 +169,7 @@ func PromptTeam(name string, teams []Team) (Team, error) {
 	return teams[i], nil
 }
 
-// RecordMapScore fdsafds
+// RecordMapScore
 func RecordMapScore(s *Scoreboard) {
 	// Any type can be given to the select's item as long as the templates properly implement the dot notation
 	// to display it.
