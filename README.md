@@ -8,4 +8,8 @@ Better KQB Scoreboard helps casters keep track of the score and display it beaut
 3. Create a browser source in OBS pointed at http://localhost:8080
 4. Profit
 
-See the (Demo Video)[https://www.youtube.com/watch?v=MoYvcVgOC2Y] for an idea of how it works. 
+See the [Demo Video](https://www.youtube.com/watch?v=MoYvcVgOC2Y) for an idea of how it works. 
+
+## Screen Shots
+![Screen Shot 1](/screenshots/scoreboard-ss-1.png)
+![Screen Shot 2](/screenshots/scoreboard-ss-2.png)

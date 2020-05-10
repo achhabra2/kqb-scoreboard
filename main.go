@@ -17,10 +17,6 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
-// const iglWestId = "5e4c6b5178d46abdfeb49e71"
-// const iglEastId = "5e4b295560f132acbb31b8f5"
-// const iglAPIUrl = "https://indy-gaming-league-api.herokuapp.com/api/circuits/"
-
 type Team struct {
 	Name  string
 	Img   string
