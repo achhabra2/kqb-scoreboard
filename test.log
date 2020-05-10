@@ -1,0 +1,143 @@
+2020/05/10 09:51:53 read: websocket: close 1001 (going away)
+2020/05/10 09:52:43 read: websocket: close 1001 (going away)
+2020/05/10 09:56:00 read: websocket: close 1001 (going away)
+2020/05/10 09:56:54 read: websocket: close 1001 (going away)
+2020/05/10 09:56:57 read: websocket: close 1001 (going away)
+2020/05/10 09:57:08 read: websocket: close 1001 (going away)
+2020/05/10 09:57:46 read: websocket: close 1001 (going away)
+2020/05/10 10:01:56 read: websocket: close 1001 (going away)
+2020/05/10 10:02:42 read: websocket: close 1001 (going away)
+2020/05/10 10:03:48 read: websocket: close 1001 (going away)
+2020/05/10 10:04:24 read: websocket: close 1001 (going away)
+2020/05/10 10:04:27 read: websocket: close 1001 (going away)
+2020/05/10 10:06:17 read: websocket: close 1001 (going away)
+2020/05/10 10:06:59 read: websocket: close 1001 (going away)
+2020/05/10 10:08:52 read: websocket: close 1001 (going away)
+2020/05/10 10:09:11 read: websocket: close 1001 (going away)
+2020/05/10 10:09:12 read: websocket: close 1001 (going away)
+2020/05/10 10:09:29 read: websocket: close 1001 (going away)
+2020/05/10 10:12:18 read: websocket: close 1001 (going away)
+2020/05/10 10:17:29 read: websocket: close 1001 (going away)
+2020/05/10 10:18:04 read: websocket: close 1001 (going away)
+2020/05/10 10:19:41 read: websocket: close 1001 (going away)
+2020/05/10 10:21:11 read: websocket: close 1001 (going away)
+2020/05/10 10:21:36 read: websocket: close 1001 (going away)
+2020/05/10 10:21:37 read: websocket: close 1001 (going away)
+2020/05/10 10:21:38 read: websocket: close 1001 (going away)
+2020/05/10 10:21:44 read: websocket: close 1001 (going away)
+2020/05/10 10:25:11 read: websocket: close 1001 (going away)
+2020/05/10 10:25:41 read: websocket: close 1001 (going away)
+2020/05/10 10:27:36 read: websocket: close 1001 (going away)
+2020/05/10 10:27:57 read: websocket: close 1001 (going away)
+2020/05/10 10:27:58 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:27:59 read: websocket: close 1001 (going away)
+2020/05/10 10:28:00 read: websocket: close 1001 (going away)
+2020/05/10 10:29:07 read: websocket: close 1001 (going away)
+2020/05/10 10:29:49 read: websocket: close 1001 (going away)
+2020/05/10 10:32:18 read: websocket: close 1001 (going away)
+2020/05/10 10:33:11 read: websocket: close 1001 (going away)
+2020/05/10 10:33:40 read: websocket: close 1001 (going away)
+2020/05/10 10:34:32 read: websocket: close 1001 (going away)
+2020/05/10 10:35:12 read: websocket: close 1001 (going away)
+2020/05/10 10:36:12 read: websocket: close 1001 (going away)
+2020/05/10 10:36:23 read: websocket: close 1001 (going away)
+2020/05/10 10:37:20 read: websocket: close 1001 (going away)
+2020/05/10 10:37:43 read: websocket: close 1001 (going away)
+2020/05/10 10:38:23 read: websocket: close 1001 (going away)
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:38:45 Websocket error: websocket: close sent
+2020/05/10 10:42:20 read: websocket: close 1001 (going away)
+2020/05/10 10:43:41 read: websocket: close 1001 (going away)
+2020/05/10 10:44:58 read: websocket: close 1001 (going away)
+2020/05/10 10:45:00 read: websocket: close 1001 (going away)
+2020/05/10 10:45:10 read: websocket: close 1001 (going away)
+2020/05/10 10:45:11 read: websocket: close 1001 (going away)
+2020/05/10 10:46:33 read: websocket: close 1001 (going away)
+2020/05/10 10:47:49 read: websocket: close 1001 (going away)
+2020/05/10 10:49:01 read: websocket: close 1001 (going away)
+2020/05/10 10:49:29 read: websocket: close 1001 (going away)
+2020/05/10 10:49:53 read: websocket: close 1001 (going away)
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:52:41 Websocket error: websocket: close sent
+2020/05/10 10:54:12 read: websocket: close 1001 (going away)
+2020/05/10 10:55:26 read: websocket: close 1001 (going away)
+2020/05/10 10:55:28 read: websocket: close 1001 (going away)
+2020/05/10 10:55:29 read: websocket: close 1001 (going away)
+2020/05/10 10:55:42 read: websocket: close 1001 (going away)
+2020/05/10 10:55:55 read: websocket: close 1001 (going away)
+2020/05/10 10:56:20 Websocket error: websocket: close sent
+2020/05/10 10:56:20 Websocket error: websocket: close sent
+2020/05/10 10:56:20 Websocket error: websocket: close sent
+2020/05/10 10:56:20 Websocket error: websocket: close sent
+2020/05/10 10:56:20 Websocket error: websocket: close sent
+2020/05/10 10:56:20 Websocket error: websocket: close sent
+2020/05/10 10:58:27 read: websocket: close 1001 (going away)
+2020/05/10 10:59:06 read: websocket: close 1001 (going away)
+2020/05/10 11:00:01 read: websocket: close 1001 (going away)
