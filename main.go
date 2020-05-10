@@ -17,6 +17,12 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+const (
+	IglAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits/"
+	IglWestID = "5e4c6b5178d46abdfeb49e71"
+	IglEastID = "5e4b295560f132acbb31b8f5"
+)
+
 type Team struct {
 	Name  string
 	Img   string
@@ -39,7 +45,7 @@ func setupLogs() {
 	}
 
 	// don't forget to close it
-	defer f.Close()
+	// defer f.Close()
 
 	// assign it to the standard logger
 	log.SetOutput(f)
@@ -125,13 +131,10 @@ func PromptIglCircuit() (string, error) {
 	}
 	var url string
 
-	iglAPIUrl := os.Getenv("IGLAPIURL")
-	iglEastId := os.Getenv("IGLEASTID")
-	iglWestId := os.Getenv("IGLWESTID")
 	if i == 0 {
-		url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", iglAPIUrl, iglEastId)
+		url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, IglEastID)
 	} else {
-		url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", iglAPIUrl, iglWestId)
+		url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, IglWestID)
 	}
 	return url, nil
 }
