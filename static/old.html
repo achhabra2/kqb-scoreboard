@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="scoreboard.css">
+    <meta charset="utf-8">
+    <script>
+        window.addEventListener("load", function (evt) {
+            var ws;
+            var output = document.getElementById("output");
+            var print = function (message) {
+                var d = document.createElement("div");
+                d.textContent = message;
+                output.appendChild(d);
+            };
+            var updateMapCSS = function (data) {
+                var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
+                var awayMaps = [1, 2, 3].map(x => `away-map-${x}`)
+                if (data.HomeMaps > 0) {
+                    for (var i = 0; i < data.HomeMaps; i++) {
+                        var elem = document.getElementById(homeMaps[i])
+                        elem.setAttribute("class", "home-oval-filled")
+                    }
+                }
+                else {
+                    homeMaps.forEach(id => document.getElementById(id).className = "oval-empty")
+                }
+                if (data.AwayMaps > 0) {
+                    for (var j = 0; j < data.AwayMaps; j++) {
+                        var elem = document.getElementById(awayMaps[j])
+                        elem.setAttribute("class", "away-oval-filled")
+                    }
+                }
+                else {
+                    awayMaps.forEach(id => document.getElementById(id).className = "oval-empty")
+                }
+            }
+            var updateScoreData = function (json) {
+                var data = JSON.parse(json)
+                console.log(data)
+                document.getElementById("home-name").innerText = data.Home.Name
+                document.getElementById("away-name").innerText = data.Away.Name
+                document.getElementById("home-stats").innerText = data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost
+                document.getElementById("away-stats").innerText = data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost
+                document.getElementById("home-total").innerText = data.HomeGames
+                document.getElementById("away-total").innerText = data.AwayGames
+                updateMapCSS(data)
+
+                if (data.HomeGames == 3) {
+                    document.getElementById("home-winner").className += " winner"
+                }
+                if(data.AwayGames == 3) {
+                    document.getElementById("away-winner").className += " winner"
+                }
+            }
+
+
+            document.getElementById("open").onclick = function (evt) {
+                if (ws) {
+                    return false;
+                }
+                ws = new WebSocket("ws://localhost:8080/ws");
+                ws.onopen = function (evt) {
+                    print("OPEN");
+                }
+                ws.onclose = function (evt) {
+                    print("CLOSE");
+                    ws = null;
+                }
+                ws.onmessage = function (evt) {
+                    // print("RESPONSE: " + evt.data);
+                    updateScoreData(evt.data)
+                }
+                ws.onerror = function (evt) {
+                    print("ERROR: " + evt.data);
+                }
+                return false;
+            };
+            document.getElementById("close").onclick = function (evt) {
+                if (!ws) {
+                    return false;
+                }
+                ws.close();
+                return false;
+            };
+        });
+    </script>
+</head>
+
+<body>
+    <div class="scoreboard">
+        <div class="title">
+            Final
+        </div>
+
+        <div class="quaters">
+            <span>1</span>
+            <span>2</span>
+            <span>3</span>
+        </div>
+
+        <div class="total">
+            T
+        </div>
+
+        <div id="home-winner" class="team team--1">
+            <div class="team__details">
+                <div class="team__details--logo">
+                    <img id="home-img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/124740/bears.png" alt="">
+                </div>
+                <div id="home-name" class="team__details--name">
+                    Home
+                </div>
+                <div id="home-stats" class="team__details--standings">
+                    (0-0)
+                </div>
+            </div>
+
+            <div class="team__score team__score--1">
+                <div id="home-map-1" class="oval-empty"></div>
+            </div>
+            <div class="team__score team__score--2">
+                <div id="home-map-2" class="oval-empty"></div>
+            </div>
+            <div class="team__score team__score--3">
+                <div id="home-map-3" class="oval-empty"></div>
+            </div>
+
+            <div id="home-total" class="team__total">
+                0
+            </div>
+        </div>
+
+        <div id="away-winner" class="team team--1">
+            <div class="team__details">
+                <div class="team__details--logo">
+                    <img id="away-img" src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/124740/cremes.png" alt="">
+                </div>
+                <div id="away-name" class="team__details--name">
+                    Away
+                </div>
+                <div id="away-stats" class="team__details--standings">
+                    (0)
+                </div>
+            </div>
+
+            <div class="team__score team__score--1">
+                <div id="away-map-1" class="oval-empty"></div>
+            </div>
+            <div class="team__score team__score--2">
+                <div id="away-map-2" class="oval-empty"></div>
+            </div>
+            <div class="team__score team__score--3">
+                <div id="away-map-3" class="oval-empty"></div>
+            </div>
+
+            <div id="away-total" class="team__total">
+                0
+            </div>
+        </div>
+
+        <!-- <div class="note">
+            WEST 1ST ROUND - GAME 5, CRE wins series 4-1
+        </div> -->
+    </div>
+    <button id="open">Open</button>
+    <button id="close">Close</button>
+    <div id="output"></div>
+</body>
+
+</html>
