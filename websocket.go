@@ -65,7 +65,7 @@ func UpdateScoreBoard(s *Scoreboard) {
 func StartHTTPServer() {
 	http.HandleFunc("/ws", ws)
 	http.HandleFunc("/echo", echo)
-	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.Handle("/", http.FileServer(http.Dir("static")))
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	}()

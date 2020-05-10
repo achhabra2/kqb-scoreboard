@@ -142,3 +142,10 @@
 2020/05/10 10:59:06 read: websocket: close 1001 (going away)
 2020/05/10 11:00:01 read: websocket: close 1001 (going away)
 2020/05/10 11:23:29 read: websocket: close 1001 (going away)
+2020/05/10 12:53:57 read: websocket: close 1001 (going away)
+2020/05/10 13:56:38 read: websocket: close 1001 (going away)
+2020/05/10 13:56:46 Websocket error: websocket: close sent
+2020/05/10 13:57:25 read: websocket: close 1001 (going away)
+2020/05/10 13:57:58 read: websocket: close 1001 (going away)
+2020/05/10 14:01:01 Websocket error: websocket: close sent
+2020/05/10 14:01:01 Websocket error: websocket: close sent
