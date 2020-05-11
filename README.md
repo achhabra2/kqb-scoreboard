@@ -28,7 +28,7 @@ Note during this alpha phase there may be bugs and minor issues you run into, he
 
 
 ## Screen Shots and Demo
-See the [Demo Video](https://www.youtube.com/watch?v=em6KXidrXVI) for an idea of how it works. 
+See the [Demo Video](https://www.youtube.com/watch?v=YtqzHPiRYow) for an idea of how it works. 
 
 ![Screen Shot 1](/screenshots/scoreboard-ss-1.png)
 ![Screen Shot 2](/screenshots/scoreboard-ss-2.png)
