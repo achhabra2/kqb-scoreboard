@@ -45,7 +45,7 @@
 
 .home-box {
   background-color: white;
-  border: 3px solid #004cff;
+  border: 5px solid #004cff;
   border-radius: 6px;
   display: block;
   padding: 0.5rem;
@@ -53,7 +53,7 @@
 
 .away-box {
   background-color: white;
-  border: 3px solid #ffdd00;
+  border: 5px solid #ffdd00;
   border-radius: 6px;
   display: block;
   padding: 0.5rem;
@@ -68,7 +68,7 @@
   height: 4rem;
   background: #004cff;
   border-radius: 50px / 25px;
-  border: 1px black solid;
+  border: 3px black solid;
   transform: rotate(5deg);
   display:inline-block;
   }
@@ -78,7 +78,7 @@
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
-  border: 1px black solid;
+  border: 3px black solid;
   transform: rotate(5deg);
   display:inline-block;
   }
@@ -88,7 +88,7 @@
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
-  border: 1px black solid;
+  border: 3px black solid;
   transform: rotate(-5deg);
   display:inline-block;
   }
@@ -99,7 +99,11 @@
   width: 1rem;
   height: 4rem;
   border-radius: 50px / 25px;
-  border: 1px black solid;
+  border: 3px black solid;
   transform: rotate(-5deg);
   display:inline-block;
+}
+
+figure {
+  border: 3px black solid;
 }

@@ -77,11 +77,17 @@
             document.getElementById("dark-mode").addEventListener("click", function () {
                 document.getElementById("home-winner").classList.toggle("has-background-dark");
                 document.getElementById("away-winner").classList.toggle("has-background-dark");
+                document.getElementById("chroma-box").classList.remove("hidden");
+                document.getElementById("home-total").classList.toggle("has-text-light");
+                document.getElementById("away-total").classList.toggle("has-text-light");
+                document.getElementById("home-stats").classList.toggle("has-text-light");
+                document.getElementById("away-stats").classList.toggle("has-text-light");
             });
 
             document.getElementById("transparent-mode").addEventListener("click", function () {
                 document.getElementById("home-winner").classList.toggle("is-transparent");
                 document.getElementById("away-winner").classList.toggle("is-transparent");
+                document.getElementById("chroma-box").className = "chroma-box";
             });
             document.getElementById("white-mode").addEventListener("click", function () {
                 document.getElementById("home-winner").className = "left home-box";
