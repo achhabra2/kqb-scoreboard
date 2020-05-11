@@ -17,9 +17,10 @@ import (
 )
 
 const (
-	IglAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits/"
-	IglWestID = "5e4c6b5178d46abdfeb49e71"
-	IglEastID = "5e4b295560f132acbb31b8f5"
+	IglAPIURL        = "https://indy-gaming-league-api.herokuapp.com/api/circuits/"
+	IglWestID        = "5e4c6b5178d46abdfeb49e71"
+	IglEastID        = "5e4b295560f132acbb31b8f5"
+	PlaceholderImage = "https://bulma.io/images/placeholders/128x128.png"
 )
 
 type Team struct {
@@ -36,6 +37,10 @@ type Stats struct {
 	MatchesWon  int
 	MatchesLost int
 }
+
+var h Team = Team{"Home Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
+var a Team = Team{"Away Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
+var s Scoreboard = Scoreboard{&h, &a, 0, 0, 0, 0}
 
 func setupLogs() {
 	f, err := os.OpenFile("./output.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
@@ -66,7 +71,7 @@ func main() {
 	if err != nil {
 		os.Exit(0)
 	}
-	s := Scoreboard{&home, &away, 0, 0, 0, 0}
+	s = Scoreboard{&home, &away, 0, 0, 0, 0}
 	UpdateScoreBoard(&s)
 	for s.HomeGames < 3 && s.AwayGames < 3 {
 		err := RecordMapScore(&s)

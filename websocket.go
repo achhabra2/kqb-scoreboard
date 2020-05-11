@@ -39,8 +39,10 @@ func ws(w http.ResponseWriter, r *http.Request) {
 		log.Print("upgrade: ", err)
 		return
 	}
+	log.Println("Websocket client connected")
 	defer c.Close()
 	clients[c] = true
+	UpdateScoreBoard(&s)
 	for {
 		_, message, err := c.ReadMessage()
 		if err != nil {

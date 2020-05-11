@@ -64,43 +64,43 @@
 }
 
 .home-oval-filled {
-  width: 1rem;
+  width: 1.5rem;
   height: 4rem;
   background: #004cff;
   border-radius: 50px / 25px;
   border: 3px black solid;
-  transform: rotate(5deg);
+  transform: rotate(-10deg);
   display:inline-block;
   }
 
 .oval-empty {
-  width: 1rem;
+  width: 1.5rem;
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
   border: 3px black solid;
-  transform: rotate(5deg);
+  transform: rotate(-10deg);
   display:inline-block;
   }
 
 .away-oval-empty {
-  width: 1rem;
+  width: 1.5rem;
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
   border: 3px black solid;
-  transform: rotate(-5deg);
+  transform: rotate(10deg);
   display:inline-block;
   }
 
 
 .away-oval-filled {
   background: #ffdd00;
-  width: 1rem;
+  width: 1.5rem;
   height: 4rem;
   border-radius: 50px / 25px;
   border: 3px black solid;
-  transform: rotate(-5deg);
+  transform: rotate(10deg);
   display:inline-block;
 }
 

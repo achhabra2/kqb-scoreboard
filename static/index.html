@@ -6,94 +6,129 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
     <meta charset="utf-8">
     <script>
+        function updateMapCSS(data) {
+            var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
+            var awayMaps = [1, 2, 3].map(x => `away-map-${x}`)
+            if (data.HomeMaps > 0) {
+                for (var i = 0; i < data.HomeMaps; i++) {
+                    var elem = document.getElementById(homeMaps[i])
+                    elem.setAttribute("class", "home-oval-filled")
+                }
+            }
+            else {
+                homeMaps.forEach(id => document.getElementById(id).className = "oval-empty")
+            }
+            if (data.AwayMaps > 0) {
+                for (var j = 0; j < data.AwayMaps; j++) {
+                    var elem = document.getElementById(awayMaps[j])
+                    elem.setAttribute("class", "away-oval-filled")
+                }
+            }
+            else {
+                awayMaps.forEach(id => document.getElementById(id).className = "away-oval-empty")
+            }
+        }
+        function updateScoreData(json) {
+            var data = JSON.parse(json)
+            console.log(data)
+            document.getElementById("home-name").innerText = data.Home.Name
+            document.getElementById("away-name").innerText = data.Away.Name
+            document.getElementById("home-stats").innerText = data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost
+            document.getElementById("away-stats").innerText = data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost
+            document.getElementById("home-total").innerText = data.HomeGames
+            document.getElementById("away-total").innerText = data.AwayGames
+            document.getElementById("home-img").src = data.Home.Img
+            document.getElementById("away-img").src = data.Away.Img
+            updateMapCSS(data)
+
+            if (data.HomeGames == 3) {
+                document.getElementById("home-winner").className += " has-background-danger"
+            }
+            if (data.AwayGames == 3) {
+                document.getElementById("away-winner").className += " has-background-danger"
+            }
+        }
+        function DarkModeToggle() {
+            document.getElementById("home-winner").classList.toggle("has-background-dark");
+            document.getElementById("away-winner").classList.toggle("has-background-dark");
+            document.getElementById("chroma-box").classList.remove("hidden");
+            document.getElementById("home-total").classList.toggle("has-text-light");
+            document.getElementById("away-total").classList.toggle("has-text-light");
+            document.getElementById("home-stats").classList.toggle("has-text-light");
+            document.getElementById("away-stats").classList.toggle("has-text-light");
+        }
+
+        function TransparentToggle() {
+            document.getElementById("home-winner").classList.toggle("is-transparent");
+            document.getElementById("away-winner").classList.toggle("is-transparent");
+            document.getElementById("chroma-box").className = "chroma-box";
+        }
+
+        function WhiteToggle() {
+            document.getElementById("home-winner").className = "left home-box";
+            document.getElementById("away-winner").className = "right away-box";
+            // document.getElementById("chroma-box").className = "hidden";
+        }
+
+        function connect() {
+            var ws = new WebSocket('ws://localhost:8080/ws');
+            window.ws = ws;
+
+            ws.onopen = function (evt) {
+                ws.send("Client Connected");
+            }
+
+            ws.onmessage = function (evt) {
+                updateScoreData(evt.data)
+            }
+
+            ws.onclose = function (e) {
+                console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
+                setTimeout(function () {
+                    connect();
+                }, 1000);
+            };
+
+            ws.onerror = function (err) {
+                console.error('Socket encountered error: ', err.message, 'Closing socket');
+                ws.close();
+            };
+        }
         window.addEventListener("load", function (evt) {
-
-            var updateMapCSS = function (data) {
-                var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
-                var awayMaps = [1, 2, 3].map(x => `away-map-${x}`)
-                if (data.HomeMaps > 0) {
-                    for (var i = 0; i < data.HomeMaps; i++) {
-                        var elem = document.getElementById(homeMaps[i])
-                        elem.setAttribute("class", "home-oval-filled")
-                    }
-                }
-                else {
-                    homeMaps.forEach(id => document.getElementById(id).className = "oval-empty")
-                }
-                if (data.AwayMaps > 0) {
-                    for (var j = 0; j < data.AwayMaps; j++) {
-                        var elem = document.getElementById(awayMaps[j])
-                        elem.setAttribute("class", "away-oval-filled")
-                    }
-                }
-                else {
-                    awayMaps.forEach(id => document.getElementById(id).className = "away-oval-empty")
-                }
-            }
-            var updateScoreData = function (json) {
-                var data = JSON.parse(json)
-                console.log(data)
-                document.getElementById("home-name").innerText = data.Home.Name
-                document.getElementById("away-name").innerText = data.Away.Name
-                document.getElementById("home-stats").innerText = data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost
-                document.getElementById("away-stats").innerText = data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost
-                document.getElementById("home-total").innerText = data.HomeGames
-                document.getElementById("away-total").innerText = data.AwayGames
-                document.getElementById("home-img").src = data.Home.Img
-                document.getElementById("away-img").src = data.Away.Img
-                updateMapCSS(data)
-
-                if (data.HomeGames == 3) {
-                    document.getElementById("home-winner").className += " has-background-danger"
-                }
-                if (data.AwayGames == 3) {
-                    document.getElementById("away-winner").className += " has-background-danger"
-                }
-            }
-
-            var ws;
-            function connect() {
-                ws = new WebSocket('ws://localhost:8080/ws');
-
-                ws.onmessage = function (evt) {
-                    updateScoreData(evt.data)
-                }
-
-                ws.onclose = function (e) {
-                    console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
-                    setTimeout(function () {
-                        connect();
-                    }, 1000);
-                };
-
-                ws.onerror = function (err) {
-                    console.error('Socket encountered error: ', err.message, 'Closing socket');
-                    ws.close();
-                };
-            }
 
             connect();
 
             document.getElementById("dark-mode").addEventListener("click", function () {
-                document.getElementById("home-winner").classList.toggle("has-background-dark");
-                document.getElementById("away-winner").classList.toggle("has-background-dark");
-                document.getElementById("chroma-box").classList.remove("hidden");
-                document.getElementById("home-total").classList.toggle("has-text-light");
-                document.getElementById("away-total").classList.toggle("has-text-light");
-                document.getElementById("home-stats").classList.toggle("has-text-light");
-                document.getElementById("away-stats").classList.toggle("has-text-light");
+                DarkModeToggle()
             });
 
             document.getElementById("transparent-mode").addEventListener("click", function () {
-                document.getElementById("home-winner").classList.toggle("is-transparent");
-                document.getElementById("away-winner").classList.toggle("is-transparent");
-                document.getElementById("chroma-box").className = "chroma-box";
+                TransparentToggle()
             });
             document.getElementById("white-mode").addEventListener("click", function () {
-                document.getElementById("home-winner").className = "left home-box";
-                document.getElementById("away-winner").className = "right away-box";
-                document.getElementById("chroma-box").className = "hidden";
+                WhiteToggle()
             });
+
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has("mode")) {
+                var mode = urlParams.get("mode");
+                switch (mode) {
+                    case "dark":
+                        DarkModeToggle();
+                        break;
+                    case "white":
+                        WhiteToggle();
+                        break;
+                    case "transparent":
+                        TransparentToggle();
+                        break;
+                    default:
+                        break;
+                }
+            } 
+            else {
+                DarkModeToggle()
+            }
         });
     </script>
 </head>

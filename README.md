@@ -6,7 +6,7 @@ Better KQB Scoreboard helps casters keep track of the score and display it beaut
 1. Download the entire release zip file from github
 2. Unzip the directory and run the kqb-scoreboard executable (Mac and Windows compatible)
 3. Create a browser source in OBS pointed at http://localhost:8080
-* Within the browser source set the dimensions to 1920 x 400
+* Within the browser source set the dimensions to 1920 x 450
 * Then add a green chroma filter to make it transparent
 4. Profit
 
@@ -23,7 +23,8 @@ Unless you have the developer terminal on windows some parts of the app will not
 ### ALPHA LIMITATIONS
 Note during this alpha phase there may be bugs and minor issues you run into, here is a list of current known issues: 
 1. No way to subtract from scores - so please make sure you record map results correctly
-2. Dark mode not working - currently the score boxes have a white background, looking to correctly implement a dark mode
+2. ~~Dark mode not working - currently the score boxes have a white background, looking to correctly implement a dark mode~~ 
+* Dark mode support added 05/10
 3. Windows keybinding and display issues as per above
 
 
