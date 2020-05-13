@@ -1,12 +1,14 @@
 # Better KQB Scoreboard
 
-Better KQB Scoreboard helps casters keep track of the score and display it beautifully. KQB Scoreboard was written in Go and provides a front end interface for use with OBS. It will import the teams and standings from IGL to display within your cast. 
+Better KQB Scoreboard helps casters keep track of scores and display them beautifully within OBS. It is primarily targeted at IGL match casters, but will be adding support for custom matches as well. It allows you to directly import team data (teams, standings, avatars, etc.) directly from IGL so there is no room for error when setting up your stream. It will prompt you to record map wins and will tally the results for you and they will be displayed properly within the widget. Thus allowing you to focus on streaming and let the widget handle the legwork for you. 
+
+KQB Scoreboard was written in Go and provides a browser widget interface for use with OBS. 
 
 ## Instructions
 1. Download the entire release zip file from github
 2. Unzip the directory and run the kqb-scoreboard executable (Mac and Windows compatible)
 3. Create a browser source in OBS pointed at http://localhost:8080
-* Within the browser source set the dimensions to 1920 x 450
+* Within the browser source set the dimensions to 1440 x 450 (Large) or 1920 x 450 (Smaller)
 * Then add a green chroma filter to make it transparent
 4. Profit
 

@@ -21,6 +21,7 @@ const (
 	IglWestID        = "5e4c6b5178d46abdfeb49e71"
 	IglEastID        = "5e4b295560f132acbb31b8f5"
 	PlaceholderImage = "https://bulma.io/images/placeholders/128x128.png"
+	KQBAvatarImage   = "/avatar.png"
 )
 
 type Team struct {
@@ -38,8 +39,8 @@ type Stats struct {
 	MatchesLost int
 }
 
-var h Team = Team{"Home Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
-var a Team = Team{"Away Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
+var h Team = Team{"Blue Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
+var a Team = Team{"Gold Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var s Scoreboard = Scoreboard{&h, &a, 0, 0, 0, 0}
 
 func setupLogs() {
@@ -61,13 +62,16 @@ func main() {
 	wg.Add(1)
 	StartHTTPServer()
 	SetupCloseHandler()
-	apiUrl, _ := PromptIglCircuit()
-	teams := GetTeamInfo(apiUrl)
-	home, err := PromptTeam("Home", teams)
+	apiUrl, err := PromptIglCircuit()
 	if err != nil {
 		os.Exit(0)
 	}
-	away, err := PromptTeam("Away", teams)
+	teams := GetTeamInfo(apiUrl)
+	home, err := PromptTeam("Blue", teams)
+	if err != nil {
+		os.Exit(0)
+	}
+	away, err := PromptTeam("Gold", teams)
 	if err != nil {
 		os.Exit(0)
 	}
@@ -116,6 +120,8 @@ func GetTeamInfo(url string) []Team {
 		test.Div = int(t.(map[string]interface{})["div"].(float64))
 		if t.(map[string]interface{})["logo"] != nil {
 			test.Img = t.(map[string]interface{})["logo"].(string)
+		} else {
+			test.Img = KQBAvatarImage
 		}
 		test.Stats.GamesWon, _ = strconv.Atoi(s.(map[string]interface{})["Games Won"].(string))
 		test.Stats.GamesLost, _ = strconv.Atoi(s.(map[string]interface{})["Games Lost"].(string))
@@ -197,8 +203,8 @@ func RecordMapScore(s *Scoreboard) error {
 		ID     int
 	}
 	m := []MapWinPrompt{
-		{fmt.Sprintf("%s (Home) Won Map", s.Home.Name), "cyan", 0},
-		{fmt.Sprintf("%s (Away) Won Map", s.Away.Name), "yellow", 1},
+		{fmt.Sprintf("%s (Blue) Won Map", s.Home.Name), "cyan", 0},
+		{fmt.Sprintf("%s (Gold) Won Map", s.Away.Name), "yellow", 1},
 	}
 	templates := &promptui.SelectTemplates{
 		Label:    "{{ . | red | bold }}?",

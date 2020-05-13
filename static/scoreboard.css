@@ -1,19 +1,37 @@
+@font-face {
+  font-family: "PirulenRg-Regular";
+  src: url("./fonts/pirulenrg.eot"); /* IE9 Compat Modes */
+  src: url("./fonts/pirulenrg.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("./fonts/pirulenrg.otf") format("opentype"), /* Open Type Font */
+    url("./fonts/pirulenrg.svg") format("svg"), /* Legacy iOS */
+    url("./fonts/pirulenrg.ttf") format("truetype"), /* Safari, Android, iOS */
+    url("./fonts/pirulenrg.woff") format("woff"), /* Modern Browsers */
+    url("./fonts/pirulenrg.woff2") format("woff2"); /* Modern Browsers */
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: PirulenRg-Regular !important;
+  overflow: hidden;
+  line-height: 1 !important;
+}
 
 .is-transparent{
   background-color: #00ff00 !important;
 }
 
 .left {
-  height: 20vh;
-  width: 30vw;
+  height: 100px;
+  width: 480px;
   left: 0vw;
   top: 0vh;
   position: absolute;
 }
 
 .right {
-  height: 20vh;
-  width: 30vw;
+  height: 100px;
+  width: 480px;
   right: 0vh;
   top: 0vh;
   position: absolute;
@@ -60,7 +78,8 @@
 }
 
 .score-text {
-  transform: translateY(-50%);
+  /* transform: translateY(-50%); */
+  font-size: 3em;
 }
 
 .home-oval-filled {
@@ -106,4 +125,36 @@
 
 figure {
   border: 3px black solid;
+}
+
+
+.wrapper-left {
+  display: grid;
+  grid-template-columns: 80px 200px 100px 60px;
+  grid-gap: 10px;
+  grid-auto-rows: 80px;
+}
+
+.wrapper-right {
+  display: grid;
+  grid-template-columns: 60px 100px 200px 80px;
+  grid-gap: 10px;
+  grid-auto-rows: 80px;
+}
+
+.one {
+  grid-column: 1;
+  grid-row: 1;
+}
+.two { 
+  grid-column: 2;
+  grid-row: 1
+}
+.three {
+  grid-column: 3;
+  grid-row: 1;
+}
+.four {
+  grid-column: 4;
+  grid-row: 1;
 }

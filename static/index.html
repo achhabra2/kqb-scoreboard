@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="scoreboard.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
     <meta charset="utf-8">
+    <script src="fitty.min.js"></script>
     <script>
         function updateMapCSS(data) {
             var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
@@ -40,7 +41,13 @@
             document.getElementById("home-img").src = data.Home.Img
             document.getElementById("away-img").src = data.Away.Img
             updateMapCSS(data)
-
+            var opts = {
+                minSize: 18,
+                maxSize: 38,
+                multiLine: true
+            }
+            fitty('#home-name', opts);
+            fitty('#away-name', opts);
             if (data.HomeGames == 3) {
                 document.getElementById("home-winner").className += " has-background-danger"
             }
@@ -125,7 +132,7 @@
                     default:
                         break;
                 }
-            } 
+            }
             else {
                 DarkModeToggle()
             }
@@ -135,58 +142,54 @@
 
 <body>
     <div id="home-winner" class="left home-box">
-        <article class="media">
-            <div class="media-left">
+        <article class="wrapper-left">
+            <div class="one">
                 <figure class="image is-64x64">
                     <img id="home-img" src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
                 </figure>
             </div>
-            <div class="media-content">
+            <div class="two">
                 <div class="content">
-                    <p>
-                        <strong id="home-name" class="has-text-link is-size-5">Home Team</strong>
-                        <br>
-                        <span id="home-stats" class="is-size-5">(0-0)</span>
-                    </p>
+                    <strong id="home-name" class="has-text-link">Blue Team</strong>
+                    <br>
+                    <span id="home-stats" class="is-size-6">(0-0)</span>
                 </div>
             </div>
-            <div class="media-right">
-                <div class="content">
-                    <div id="home-map-1" class="oval-empty"></div>
-                    <div id="home-map-2" class="oval-empty"></div>
-                    <div id="home-map-3" class="oval-empty"></div>
-                    <span>&nbsp; &nbsp;</span>
-                    <h1 id="home-total" class="is-inline-block score-text">
-                        0
-                    </h1>
-                </div>
+            <div class="three">
+                <div id="home-map-1" class="oval-empty"></div>
+                <div id="home-map-2" class="oval-empty"></div>
+                <div id="home-map-3" class="oval-empty"></div>
+            </div>
+            <div class="four">
+                <span id="home-total" class="is-inline-block score-text">
+                    0
+                </span>
             </div>
         </article>
     </div>
     <div id="chroma-box" class="chroma-box"></div>
     <div id="away-winner" class="right away-box">
-        <article class="media">
-            <div class="media-left">
-                <div class="content">
-                    <h1 id="away-total" class="is-inline-block score-text">
-                        0
-                    </h1>
-                    <span>&nbsp; &nbsp;</span>
-                    <div id="away-map-3" class="away-oval-empty"></div>
-                    <div id="away-map-2" class="away-oval-empty"></div>
-                    <div id="away-map-1" class="away-oval-empty"></div>
-                </div>
+        <article class="wrapper-right">
+            <div class="one">
+                <span id="away-total" class="is-inline-block score-text">
+                    0
+                </span>
             </div>
-            <div class="media-content">
+            <div class="two">
+                <div id="away-map-3" class="away-oval-empty"></div>
+                <div id="away-map-2" class="away-oval-empty"></div>
+                <div id="away-map-1" class="away-oval-empty"></div>
+            </div>
+            <div class="three">
                 <div class="content">
                     <p>
-                        <strong id="away-name" class="has-text-warning is-size-5">Away Team</strong>
+                        <strong id="away-name" class="has-text-warning">Gold Team</strong>
                         <br>
-                        <span id="away-stats" class="is-size-5">(0-0)</span>
+                        <span id="away-stats" class="is-size-6">(0-0)</span>
                     </p>
                 </div>
             </div>
-            <div class="media-right">
+            <div class="four">
                 <figure class="image is-64x64">
                     <img id="away-img" src="https://bulma.io/images/placeholders/128x128.png" alt="Image">
                 </figure>
