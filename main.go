@@ -160,7 +160,7 @@ func PromptTeam(name string, teams []Team) (Team, error) {
 	// Any type can be given to the select's item as long as the templates properly implement the dot notation
 	// to display it.
 	var color string
-	if name == "Home" {
+	if name == "Blue" {
 		color = "cyan"
 	} else {
 		color = "yellow"
