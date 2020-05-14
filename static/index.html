@@ -7,6 +7,16 @@
     <meta charset="utf-8">
     <script src="fitty.min.js"></script>
     <script>
+        function insertNewLine(text) {
+            var output = ""
+            const regex = /.{1,14}(\s|$)/g;
+            let m;
+            if ((m = text.match(regex)) !== null) {
+            }
+            m.forEach(match => output += (match + "\n"))
+            console.log(m)
+            return output
+        }
         function updateMapCSS(data) {
             var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
             var awayMaps = [1, 2, 3].map(x => `away-map-${x}`)
@@ -32,17 +42,21 @@
         function updateScoreData(json) {
             var data = JSON.parse(json)
             console.log(data)
-            document.getElementById("home-name").innerText = data.Home.Name
-            document.getElementById("away-name").innerText = data.Away.Name
+            document.getElementById("home-name").innerText = insertNewLine(data.Home.Name)
+            document.getElementById("away-name").innerText = insertNewLine(data.Away.Name)
             document.getElementById("home-stats").innerText = data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost
             document.getElementById("away-stats").innerText = data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost
             document.getElementById("home-total").innerText = data.HomeGames
             document.getElementById("away-total").innerText = data.AwayGames
-            document.getElementById("home-img").src = data.Home.Img
-            document.getElementById("away-img").src = data.Away.Img
+            if (document.getElementById("home-img").src != data.Home.Img) {
+                document.getElementById("home-img").src = data.Home.Img
+            }
+            if (document.getElementById("away-img").src != data.Away.Img) {
+                document.getElementById("away-img").src = data.Away.Img
+            }
             updateMapCSS(data)
             var opts = {
-                minSize: 18,
+                minSize: 14,
                 maxSize: 38,
                 multiLine: true
             }
@@ -150,7 +164,7 @@
             </div>
             <div class="two">
                 <div class="content">
-                    <strong id="home-name" class="blue-text">Blue Team</strong>
+                    <strong id="home-name" class="blue-text team-name">Blue Team</strong>
                     <br>
                     <span id="home-stats" class="is-size-6">(0-0)</span>
                 </div>
@@ -183,7 +197,7 @@
             <div class="three">
                 <div class="content">
                     <p>
-                        <strong id="away-name" class="gold-text">Gold Team</strong>
+                        <strong id="away-name" class="gold-text team-name">Gold Team</strong>
                         <br>
                         <span id="away-stats" class="is-size-6">(0-0)</span>
                     </p>

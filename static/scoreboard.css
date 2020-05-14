@@ -140,14 +140,14 @@ figure {
   display: grid;
   grid-template-columns: 80px 200px 100px 60px;
   grid-gap: 10px;
-  grid-auto-rows: 80px;
+  grid-auto-rows: 70px;
 }
 
 .wrapper-right {
   display: grid;
   grid-template-columns: 60px 100px 200px 80px;
   grid-gap: 10px;
-  grid-auto-rows: 80px;
+  grid-auto-rows: 70px;
 }
 
 .one {
@@ -165,4 +165,11 @@ figure {
 .four {
   grid-column: 4;
   grid-row: 1;
+}
+
+.team-name {
+  white-space: nowrap;
+  display: inline-block;
+  overflow: hidden;
+  height: 45px;
 }
