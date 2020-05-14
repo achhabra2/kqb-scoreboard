@@ -8,7 +8,7 @@ KQB Scoreboard was written in Go and provides a browser widget interface for use
 1. Download the entire release zip file from github
 2. Unzip the directory and run the kqb-scoreboard executable (Mac and Windows compatible)
 3. Create a browser source in OBS pointed at http://localhost:8080
-* Within the browser source set the dimensions to 1440 x 450 (Large) or 1920 x 450 (Smaller)
+* Within the browser source set the dimensions to 1440 x 90 (Large) or 1920 x 90 (Smaller)
 * Then add a green chroma filter to make it transparent
 4. Profit
 
