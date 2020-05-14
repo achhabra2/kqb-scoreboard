@@ -22,7 +22,7 @@ body {
 }
 
 .left {
-  height: 100px;
+  height: 90px;
   width: 480px;
   left: 0vw;
   top: 0vh;
@@ -30,7 +30,7 @@ body {
 }
 
 .right {
-  height: 100px;
+  height: 90px;
   width: 480px;
   right: 0vh;
   top: 0vh;
@@ -61,9 +61,17 @@ body {
   visibility: visible;
 }
 
+.blue-text {
+  color: #0192ff;
+}
+
+.gold-text {
+  color: #f2ae12;
+}
+
 .home-box {
   background-color: white;
-  border: 5px solid #004cff;
+  border: 5px solid #0192ff;
   border-radius: 6px;
   display: block;
   padding: 0.5rem;
@@ -71,7 +79,7 @@ body {
 
 .away-box {
   background-color: white;
-  border: 5px solid #ffdd00;
+  border: 5px solid #f2ae12;
   border-radius: 6px;
   display: block;
   padding: 0.5rem;
@@ -85,7 +93,7 @@ body {
 .home-oval-filled {
   width: 1.5rem;
   height: 4rem;
-  background: #004cff;
+  background: #0192ff;
   border-radius: 50px / 25px;
   border: 3px black solid;
   transform: rotate(-10deg);
@@ -114,7 +122,7 @@ body {
 
 
 .away-oval-filled {
-  background: #ffdd00;
+  background: #f2ae12;
   width: 1.5rem;
   height: 4rem;
   border-radius: 50px / 25px;

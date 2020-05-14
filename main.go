@@ -62,6 +62,31 @@ func main() {
 	wg.Add(1)
 	StartHTTPServer()
 	SetupCloseHandler()
+	matchType := PromptIGLCustom()
+	log.Println("Selected Match Type: ", matchType)
+	if matchType == "Custom" {
+		s = CustomFlow()
+	} else if matchType == "IGL" {
+		s = IGLMatchFlow()
+	}
+
+	RunMatch()
+	wg.Wait()
+}
+
+func RunMatch() {
+	UpdateScoreBoard(&s)
+	for s.HomeGames < 3 && s.AwayGames < 3 {
+		err := RecordMapScore(&s)
+		// Allow exit out if prompt errors out
+		if err != nil {
+			os.Exit(0)
+		}
+		UpdateScoreBoard(&s)
+	}
+}
+
+func IGLMatchFlow() Scoreboard {
 	apiUrl, err := PromptIglCircuit()
 	if err != nil {
 		os.Exit(0)
@@ -75,17 +100,7 @@ func main() {
 	if err != nil {
 		os.Exit(0)
 	}
-	s = Scoreboard{&home, &away, 0, 0, 0, 0}
-	UpdateScoreBoard(&s)
-	for s.HomeGames < 3 && s.AwayGames < 3 {
-		err := RecordMapScore(&s)
-		// Allow exit out if prompt errors out
-		if err != nil {
-			os.Exit(0)
-		}
-		UpdateScoreBoard(&s)
-	}
-	wg.Wait()
+	return Scoreboard{&home, &away, 0, 0, 0, 0}
 }
 
 func GetTeamInfo(url string) []Team {
@@ -129,7 +144,6 @@ func GetTeamInfo(url string) []Team {
 		test.Stats.MatchesLost, _ = strconv.Atoi(s.(map[string]interface{})["Matches Lost"].(string))
 		teams = append(teams, test)
 	}
-	// fmt.Println(teams)
 	return teams
 }
 
