@@ -84,6 +84,8 @@ func RunMatch() {
 		}
 		UpdateScoreBoard(&s)
 	}
+	fmt.Println("Game Complete! ")
+	fmt.Printf("Final Score: \n %s: %d\n %s: %d\n", s.Home.Name, s.HomeGames, s.Away.Name, s.AwayGames)
 }
 
 func IGLMatchFlow() Scoreboard {
