@@ -173,6 +173,7 @@ func PromptIglCircuit() (string, error) {
 func PromptTeam(name string, teams []Team) (Team, error) {
 	// Any type can be given to the select's item as long as the templates properly implement the dot notation
 	// to display it.
+	// const emoji = "\U0001F41D"
 	var color string
 	if name == "Blue" {
 		color = "cyan"
@@ -180,10 +181,10 @@ func PromptTeam(name string, teams []Team) (Team, error) {
 		color = "yellow"
 	}
 	templates := &promptui.SelectTemplates{
-		Label:    "{{ . }}?",
-		Active:   fmt.Sprintf("\U0001F41D {{ .Name | %s }}", color),
+		// Label:    "{{ . }}?",
+		Active:   fmt.Sprintf("%s {{ .Name | %s | bold }}", promptui.IconSelect, color),
 		Inactive: fmt.Sprintf("  {{ .Name | %s }}", color),
-		Selected: fmt.Sprintf("\U0001F41D {{ .Name | %s }}", color),
+		Selected: fmt.Sprintf("%s {{ .Name | %s | bold }}", promptui.IconGood, color),
 		Details: `
 	--------- Team ----------
 	{{ "Name:" | faint }}	{{ .Name }}
@@ -216,15 +217,16 @@ func RecordMapScore(s *Scoreboard) error {
 		Color  string
 		ID     int
 	}
+	// const emoji = "\U0001F525"
 	m := []MapWinPrompt{
 		{fmt.Sprintf("%s (Blue) Won Map", s.Home.Name), "cyan", 0},
 		{fmt.Sprintf("%s (Gold) Won Map", s.Away.Name), "yellow", 1},
 	}
 	templates := &promptui.SelectTemplates{
-		Label:    "{{ . | red | bold }}?",
-		Active:   "\U0001F525 {{ .Option | red | bold }}",
+		Label:    fmt.Sprintf("%s {{ . | red | bold }}?", promptui.IconInitial),
+		Active:   fmt.Sprintf("%s {{ .Option | red | bold }}", promptui.IconSelect),
 		Inactive: "  {{ .Option | faint }}",
-		Selected: "\U0001F525 {{ .Option | red | bold }}",
+		Selected: fmt.Sprintf("%s {{ .Option | red | bold }}", promptui.IconGood),
 	}
 
 	prompt := promptui.Select{

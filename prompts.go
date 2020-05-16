@@ -67,7 +67,8 @@ func CustomFlow() Scoreboard {
 func PromptCustomName(name string) (result string) {
 
 	prompt := promptui.Prompt{
-		Label: name,
+		Label:     name,
+		AllowEdit: true,
 	}
 
 	result, err := prompt.Run()
@@ -85,15 +86,16 @@ func PromptCustomStanding(team string) (result string) {
 	validate := func(input string) error {
 		match, _ := regexp.Match(`^\d+\-\d+$`, []byte(input))
 		if !match {
-			return errors.New("Invalid standing win/loss entry.")
+			return errors.New("invalid standing win/loss entry")
 		}
 		return nil
 	}
 
 	prompt := promptui.Prompt{
-		Label:    fmt.Sprintf("What is the %s Team Matches Won-Lost?", team),
-		Default:  "0-0",
-		Validate: validate,
+		Label:     fmt.Sprintf("What is the %s Team Matches Won-Lost?", team),
+		Default:   "0-0",
+		AllowEdit: true,
+		Validate:  validate,
 	}
 
 	result, err := prompt.Run()
