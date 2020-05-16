@@ -23,7 +23,7 @@ body {
 
 .left {
   height: 90px;
-  width: 480px;
+  width: 600px;
   left: 0vw;
   top: 0vh;
   position: absolute;
@@ -31,7 +31,7 @@ body {
 
 .right {
   height: 90px;
-  width: 480px;
+  width: 600px;
   right: 0vh;
   top: 0vh;
   position: absolute;
@@ -138,14 +138,14 @@ figure {
 
 .wrapper-left {
   display: grid;
-  grid-template-columns: 80px 200px 100px 60px;
+  grid-template-columns: 80px 320px 100px 60px;
   grid-gap: 10px;
   grid-auto-rows: 70px;
 }
 
 .wrapper-right {
   display: grid;
-  grid-template-columns: 60px 100px 200px 80px;
+  grid-template-columns: 60px 100px 320px 80px;
   grid-gap: 10px;
   grid-auto-rows: 70px;
 }

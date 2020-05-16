@@ -7,16 +7,16 @@
     <meta charset="utf-8">
     <script src="fitty.min.js"></script>
     <script>
-        function insertNewLine(text) {
-            var output = ""
-            const regex = /.{1,14}(\s|$)/g;
-            let m;
-            if ((m = text.match(regex)) !== null) {
-            }
-            m.forEach(match => output += (match + "\n"))
-            console.log(m)
-            return output
-        }
+        // function insertNewLine(text) {
+        //     var output = ""
+        //     const regex = /.{1,14}(\s|$)/g;
+        //     let m;
+        //     if ((m = text.match(regex)) !== null) {
+        //     }
+        //     m.forEach(match => output += (match + "\n"))
+        //     console.log(m)
+        //     return output
+        // }
         function updateMapCSS(data) {
             var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
             var awayMaps = [1, 2, 3].map(x => `away-map-${x}`)
@@ -42,8 +42,8 @@
         function updateScoreData(json) {
             var data = JSON.parse(json)
             console.log(data)
-            document.getElementById("home-name").innerText = insertNewLine(data.Home.Name)
-            document.getElementById("away-name").innerText = insertNewLine(data.Away.Name)
+            document.getElementById("home-name").innerText = data.Home.Name
+            document.getElementById("away-name").innerText = data.Away.Name
             document.getElementById("home-stats").innerText = data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost
             document.getElementById("away-stats").innerText = data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost
             document.getElementById("home-total").innerText = data.HomeGames
