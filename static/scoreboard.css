@@ -86,7 +86,7 @@ body {
 }
 
 .score-text {
-  /* transform: translateY(-50%); */
+  transform: translateY(15%);
   font-size: 3em;
 }
 
@@ -95,7 +95,7 @@ body {
   height: 4rem;
   background: #0192ff;
   border-radius: 50px / 25px;
-  border: 3px black solid;
+  border: 3px #0061ac solid;
   transform: rotate(-10deg);
   display:inline-block;
   }
@@ -105,7 +105,7 @@ body {
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
-  border: 3px black solid;
+  border: 3px #0061ac solid;
   transform: rotate(-10deg);
   display:inline-block;
   }
@@ -115,7 +115,7 @@ body {
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
-  border: 3px black solid;
+  border: 3px #af7e0d solid;
   transform: rotate(10deg);
   display:inline-block;
   }
@@ -126,15 +126,10 @@ body {
   width: 1.5rem;
   height: 4rem;
   border-radius: 50px / 25px;
-  border: 3px black solid;
+  border: 3px #af7e0d solid;
   transform: rotate(10deg);
   display:inline-block;
 }
-
-figure {
-  border: 3px black solid;
-}
-
 
 .wrapper-left {
   display: grid;
@@ -172,4 +167,21 @@ figure {
   display: inline-block;
   overflow: hidden;
   height: 45px;
+}
+
+.dark-background {
+  background-color: black !important;
+}
+
+.winner-background {
+  outline: 5px solid purple;
+  outline-offset: -10px;
+}
+
+.home-outline {
+  border: 3px #0061ac solid;
+}
+
+.away-outline {
+  border: 3px #af7e0d solid;
 }
