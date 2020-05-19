@@ -7,7 +7,7 @@ compile:
 	packr2 clean
 fyne-win:
 	packr2
-	fyne-cross windows
+	fyne-cross windows -icon Icon.png
 	packr2 clean
 
 fyne-mac:

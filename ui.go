@@ -157,7 +157,26 @@ func IGLCircuitSelect(w fyne.Window) *fyne.Container {
 	label.Alignment = fyne.TextAlignCenter
 	label.TextStyle.Bold = true
 
-	options := []string{"East Circuit", "West Circuit"}
+	ch := make(chan []IGLCircuit)
+
+	w.SetContent(ProgressIndicator())
+	go GetIGLCircuits(ch)
+	circuits := <-ch
+
+	kqbCircuits := []IGLCircuit{}
+
+	for _, circuit := range circuits {
+		if circuit.Game == "KILLER QUEEN BLACK" {
+			kqbCircuits = append(kqbCircuits, circuit)
+		}
+	}
+
+	options := make([]string, len(kqbCircuits))
+
+	for i, circuit := range kqbCircuits {
+		options[i] = circuit.Region + " " + circuit.Game
+	}
+
 	var url string
 
 	nextButton := widget.NewButton("Next", func() {
@@ -169,10 +188,10 @@ func IGLCircuitSelect(w fyne.Window) *fyne.Container {
 	nextButton.Disable()
 
 	circuitSelect := widget.NewSelect(options, func(value string) {
-		if value == "East Circuit" {
-			url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, IglEastID)
-		} else {
-			url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, IglWestID)
+		for i, option := range options {
+			if option == value {
+				url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, kqbCircuits[i].ID)
+			}
 		}
 
 		nextButton.Enable()
@@ -241,7 +260,21 @@ func ScoreboardContent(w fyne.Window) *fyne.Container {
 	scoreboardURL, _ := url.Parse("http://localhost:8080")
 	link := widget.NewHyperlink("Scoreboard", scoreboardURL)
 	link.Alignment = fyne.TextAlignCenter
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, link)
+
+	resetButton := widget.NewButtonWithIcon("Reset", theme.DeleteIcon(), func() {
+		s.HomeMaps = 0
+		s.HomeGames = 0
+		s.AwayGames = 0
+		s.HomeGames = 0
+		blueMaps.Text = strconv.Itoa(s.HomeMaps)
+		blueSets.Text = strconv.Itoa(s.HomeGames)
+		goldMaps.Text = strconv.Itoa(s.AwayMaps)
+		goldSets.Text = strconv.Itoa(s.AwayGames)
+		scoreboardContainer.Refresh()
+		UpdateScoreBoard(&s)
+	})
+	resetButtonContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), resetButton, layout.NewSpacer())
+	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link)
 	return container
 }
 

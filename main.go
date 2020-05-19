@@ -7,10 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"os/signal"
 	"strconv"
-	"sync"
-	"syscall"
 
 	"fyne.io/fyne/app"
 )
@@ -57,8 +54,8 @@ func setupLogs() {
 
 func main() {
 	setupLogs()
-	var wg sync.WaitGroup
-	wg.Add(1)
+	// var wg sync.WaitGroup
+	// wg.Add(1)
 	StartHTTPServer()
 	// SetupCloseHandler()
 	myApp := app.New()
@@ -111,14 +108,4 @@ func GetTeamInfo(url string, c chan []Team) {
 		teams = append(teams, test)
 	}
 	c <- teams
-}
-
-func SetupCloseHandler() {
-	c := make(chan os.Signal)
-	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-	go func() {
-		<-c
-		fmt.Println("\r- Ctrl+C pressed in Terminal")
-		os.Exit(0)
-	}()
 }

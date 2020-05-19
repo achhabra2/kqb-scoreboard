@@ -5,29 +5,13 @@ Better KQB Scoreboard helps casters keep track of scores and display them beauti
 KQB Scoreboard was written in Go and provides a browser widget interface for use with OBS. 
 
 ## Instructions
-1. Download the entire release zip file from github
-2. Unzip the directory and run the kqb-scoreboard executable (Mac and Windows compatible)
-3. Create a browser source in OBS pointed at http://localhost:8080
-* Within the browser source set the dimensions to 1440 x 90 (Large) or 1920 x 90 (Smaller)
+1. Download the new GUI release from Github for your platform (Windows or Mac)
+2. Unzip the file and run the App
+3. Follow the on screen instructions for IGL or Custom Match Type
+4. Create a browser source in OBS pointed at http://localhost:8080
+* Recommended dimensions are 1760x90 to get the look in the screen shot below
 * Then add a green chroma filter to make it transparent
-4. Profit
-
-### IMPORTANT NOTE FOR WINDOWS USERS
-Unless you have the developer terminal on windows some parts of the app will not display 100% correctly, this is purely cosmetic and will have no affect on what the viewers see. On windows instead of using the arrow keys you must use the J K H L keys to navigate the menus. 
-
-#### Windows Key Bindings (Will hopefully be improved)
-- *J = Down*
-- *K = Up*
-- *H = Page Down*
-- *L = Page Up*
-- *Enter = Select*
-
-### ALPHA LIMITATIONS
-Note during this alpha phase there may be bugs and minor issues you run into, here is a list of current known issues: 
-1. No way to subtract from scores - so please make sure you record map results correctly
-2. ~~Dark mode not working - currently the score boxes have a white background, looking to correctly implement a dark mode~~ 
-* Dark mode support added 05/10
-3. Windows keybinding and display issues as per above
+5. Profit
 
 
 ## Screen Shots and Demo
