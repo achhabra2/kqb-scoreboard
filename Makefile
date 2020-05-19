@@ -1,9 +1,11 @@
 compile:
+	export CGO_ENABLED=1
+	packr2
 	echo "Compiling for mac and windows"
 	GOOS=windows GOARCH=amd64 go build -o kqb-scoreboard.exe .
 	GOOS=darwin GOARCH=amd64 go build -o kqb-scoreboard .
+	packr2 clean
 fyne-win:
-	export CGO_ENABLED=1
 	packr2
 	fyne-cross windows
 	packr2 clean
