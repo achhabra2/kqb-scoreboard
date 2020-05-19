@@ -7,20 +7,12 @@
     <meta charset="utf-8">
     <script src="fitty.min.js"></script>
     <script>
-        // function insertNewLine(text) {
-        //     var output = ""
-        //     const regex = /.{1,14}(\s|$)/g;
-        //     let m;
-        //     if ((m = text.match(regex)) !== null) {
-        //     }
-        //     m.forEach(match => output += (match + "\n"))
-        //     console.log(m)
-        //     return output
-        // }
+
         function updateMapCSS(data) {
             var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
             var awayMaps = [1, 2, 3].map(x => `away-map-${x}`)
             if (data.HomeMaps > 0) {
+                homeMaps.forEach(id => document.getElementById(id).className = "oval-empty")
                 for (var i = 0; i < data.HomeMaps; i++) {
                     var elem = document.getElementById(homeMaps[i])
                     elem.setAttribute("class", "home-oval-filled")
@@ -30,6 +22,7 @@
                 homeMaps.forEach(id => document.getElementById(id).className = "oval-empty")
             }
             if (data.AwayMaps > 0) {
+                awayMaps.forEach(id => document.getElementById(id).className = "away-oval-empty")
                 for (var j = 0; j < data.AwayMaps; j++) {
                     var elem = document.getElementById(awayMaps[j])
                     elem.setAttribute("class", "away-oval-filled")
@@ -42,8 +35,20 @@
         function updateScoreData(json) {
             var data = JSON.parse(json)
             console.log(data)
-            document.getElementById("home-name").innerText = data.Home.Name
-            document.getElementById("away-name").innerText = data.Away.Name
+            var opts = {
+                minSize: 14,
+                maxSize: 38,
+                multiLine: true
+            }
+
+            if (document.getElementById("home-name").innerText != data.Home.Name) {
+                document.getElementById("home-name").innerText = data.Home.Name
+                fitty('#home-name', opts);
+            }
+            if (document.getElementById("away-name").innerText != data.Away.Name) {
+                document.getElementById("away-name").innerText = data.Away.Name
+                fitty('#away-name', opts);
+            }
             document.getElementById("home-stats").innerText = data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost
             document.getElementById("away-stats").innerText = data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost
             document.getElementById("home-total").innerText = data.HomeGames
@@ -55,13 +60,6 @@
                 document.getElementById("away-img").src = data.Away.Img
             }
             updateMapCSS(data)
-            var opts = {
-                minSize: 14,
-                maxSize: 38,
-                multiLine: true
-            }
-            fitty('#home-name', opts);
-            fitty('#away-name', opts);
             if (data.HomeGames == 3) {
                 document.getElementById("home-winner").className += " winner-background"
             }

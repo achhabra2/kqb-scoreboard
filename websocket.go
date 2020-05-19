@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gobuffalo/packr/v2"
 	"github.com/gorilla/websocket"
 )
 
@@ -67,7 +68,8 @@ func UpdateScoreBoard(s *Scoreboard) {
 func StartHTTPServer() {
 	http.HandleFunc("/ws", ws)
 	http.HandleFunc("/echo", echo)
-	http.Handle("/", http.FileServer(http.Dir("static")))
+	box := packr.New("static", "./static")
+	http.Handle("/", http.FileServer(box))
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	}()

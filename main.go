@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -13,7 +12,7 @@ import (
 	"sync"
 	"syscall"
 
-	"github.com/manifoldco/promptui"
+	"fyne.io/fyne/app"
 )
 
 const (
@@ -61,51 +60,16 @@ func main() {
 	var wg sync.WaitGroup
 	wg.Add(1)
 	StartHTTPServer()
-	SetupCloseHandler()
-	matchType := PromptIGLCustom()
-	log.Println("Selected Match Type: ", matchType)
-	if matchType == "Custom" {
-		s = CustomFlow()
-	} else if matchType == "IGL" {
-		s = IGLMatchFlow()
-	}
-
-	RunMatch()
-	wg.Wait()
+	// SetupCloseHandler()
+	myApp := app.New()
+	_ = GameType(myApp)
+	myApp.Run()
+	// RunMatch()
+	// wg.Wait()
+	tidyUp()
 }
 
-func RunMatch() {
-	UpdateScoreBoard(&s)
-	for s.HomeGames < 3 && s.AwayGames < 3 {
-		err := RecordMapScore(&s)
-		// Allow exit out if prompt errors out
-		if err != nil {
-			os.Exit(0)
-		}
-		UpdateScoreBoard(&s)
-	}
-	fmt.Println("Game Complete! ")
-	fmt.Printf("Final Score: \n %s: %d\n %s: %d\n", s.Home.Name, s.HomeGames, s.Away.Name, s.AwayGames)
-}
-
-func IGLMatchFlow() Scoreboard {
-	apiUrl, err := PromptIglCircuit()
-	if err != nil {
-		os.Exit(0)
-	}
-	teams := GetTeamInfo(apiUrl)
-	home, err := PromptTeam("Blue", teams)
-	if err != nil {
-		os.Exit(0)
-	}
-	away, err := PromptTeam("Gold", teams)
-	if err != nil {
-		os.Exit(0)
-	}
-	return Scoreboard{&home, &away, 0, 0, 0, 0}
-}
-
-func GetTeamInfo(url string) []Team {
+func GetTeamInfo(url string, c chan []Team) {
 	fmt.Println("Fetching Team Information from IGL...")
 	resp, err := http.Get(url)
 	if err != nil {
@@ -146,113 +110,7 @@ func GetTeamInfo(url string) []Team {
 		test.Stats.MatchesLost, _ = strconv.Atoi(s.(map[string]interface{})["Matches Lost"].(string))
 		teams = append(teams, test)
 	}
-	return teams
-}
-
-func PromptIglCircuit() (string, error) {
-	prompt := promptui.Select{
-		Label: fmt.Sprintf("Select IGL Circuit:"),
-		Items: []string{"KQB East", "KQB West"},
-	}
-
-	i, _, err := prompt.Run()
-
-	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		return "", errors.New("Invalid Team Selection")
-	}
-	var url string
-
-	if i == 0 {
-		url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, IglEastID)
-	} else {
-		url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, IglWestID)
-	}
-	return url, nil
-}
-
-// PromptTeam
-func PromptTeam(name string, teams []Team) (Team, error) {
-	// Any type can be given to the select's item as long as the templates properly implement the dot notation
-	// to display it.
-	// const emoji = "\U0001F41D"
-	var color string
-	if name == "Blue" {
-		color = "cyan"
-	} else {
-		color = "yellow"
-	}
-	templates := &promptui.SelectTemplates{
-		// Label:    "{{ . }}?",
-		Active:   fmt.Sprintf("%s {{ .Name | %s | bold }}", promptui.IconSelect, color),
-		Inactive: fmt.Sprintf("  {{ .Name | %s }}", color),
-		Selected: fmt.Sprintf("%s {{ .Name | %s | bold }}", promptui.IconGood, color),
-		Details: `
-	--------- Team ----------
-	{{ "Name:" | faint }}	{{ .Name }}
-	{{ "Tier:" | faint }}	{{ .Tier }}
-	{{ "Division:" | faint }}	{{ .Div }}`,
-	}
-
-	prompt := promptui.Select{
-		Label:     fmt.Sprintf("Select %s Team", name),
-		Items:     teams,
-		Templates: templates,
-		Size:      6,
-	}
-
-	i, _, err := prompt.Run()
-
-	if err != nil {
-		log.Printf("Prompt failed %v\n", err)
-		return Team{}, errors.New("Map Score Prompt Failed")
-	}
-	return teams[i], nil
-}
-
-// RecordMapScore
-func RecordMapScore(s *Scoreboard) error {
-	// Any type can be given to the select's item as long as the templates properly implement the dot notation
-	// to display it.
-	type MapWinPrompt struct {
-		Option string
-		Color  string
-		ID     int
-	}
-	// const emoji = "\U0001F525"
-	m := []MapWinPrompt{
-		{fmt.Sprintf("%s (Blue) Won Map", s.Home.Name), "cyan", 0},
-		{fmt.Sprintf("%s (Gold) Won Map", s.Away.Name), "yellow", 1},
-	}
-	templates := &promptui.SelectTemplates{
-		Label:    fmt.Sprintf("%s {{ . | red | bold }}?", promptui.IconInitial),
-		Active:   fmt.Sprintf("%s {{ .Option | red | bold }}", promptui.IconSelect),
-		Inactive: "  {{ .Option | faint }}",
-		Selected: fmt.Sprintf("%s {{ .Option | red | bold }}", promptui.IconGood),
-	}
-
-	prompt := promptui.Select{
-		Label:     fmt.Sprintf("Select Who Won Map"),
-		Items:     m,
-		Templates: templates,
-		Size:      2,
-	}
-
-	i, _, err := prompt.Run()
-
-	if m[i].ID == 0 {
-		s.IncrementHome()
-		fmt.Printf("%s Score: %d Games %d Maps\n", s.Home.Name, s.HomeGames, s.HomeMaps)
-	} else if m[i].ID == 1 {
-		s.IncrementAway()
-		fmt.Printf("%s: %d Games %d Maps\n", s.Away.Name, s.AwayGames, s.AwayMaps)
-	}
-
-	if err != nil {
-		log.Printf("Map Score Prompt failed %v\n", err)
-		return errors.New("Map Score Prompt Failed")
-	}
-	return nil
+	c <- teams
 }
 
 func SetupCloseHandler() {
