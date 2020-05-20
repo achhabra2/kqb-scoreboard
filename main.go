@@ -53,16 +53,19 @@ func setupLogs() {
 }
 
 func main() {
+	// Configure log output to file
 	setupLogs()
-	// var wg sync.WaitGroup
-	// wg.Add(1)
+
+	// Setup HTTP handler and websocket handler
 	StartHTTPServer()
-	// SetupCloseHandler()
+
+	// Create Fyne App
 	myApp := app.New()
+	myApp.SetIcon(resourceIconPng)
 	_ = GameType(myApp)
 	myApp.Run()
-	// RunMatch()
-	// wg.Wait()
+
+	// Called before application exist
 	tidyUp()
 }
 
@@ -71,6 +74,7 @@ func GetTeamInfo(url string, c chan []Team) {
 	resp, err := http.Get(url)
 	if err != nil {
 		// handle error
+		log.Println("Could not fetch team info from IGL")
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)

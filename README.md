@@ -5,7 +5,7 @@ Better KQB Scoreboard helps casters keep track of scores and display them beauti
 KQB Scoreboard was written in Go and provides a browser widget interface for use with OBS. 
 
 ## Instructions
-1. Download the new GUI release from Github for your platform (Windows or Mac)
+1. Download the new GUI release from [Github Releases Page](https://github.com/achhabra2/kqb-scoreboard/releases)
 2. Unzip the file and run the App
 3. Follow the on screen instructions for IGL or Custom Match Type
 4. Create a browser source in OBS pointed at http://localhost:8080
