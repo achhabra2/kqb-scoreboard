@@ -199,11 +199,14 @@
         }
 
         function StopTimer() {
-            clearInterval(t)
-            t = null
+            if (t) {
+                clearInterval(t);
+                t = null
+            }
         }
 
         function ResetTimer() {
+            StopTimer()
             timerText.textContent = "00:00"
             seconds = 0
             minutes = 0
