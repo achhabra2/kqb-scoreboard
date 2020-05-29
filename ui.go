@@ -274,7 +274,20 @@ func ScoreboardContent(w fyne.Window) *fyne.Container {
 		UpdateScoreBoard(&s)
 	})
 	resetButtonContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), resetButton, layout.NewSpacer())
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link)
+	starTimerButton := widget.NewButton("Start Timer", func() {
+		UpdateTimer("StartTimer")
+	})
+	stopTimerButton := widget.NewButton("Stop Timer", func() {
+		UpdateTimer("StopTimer")
+	})
+	resetTimerButton := widget.NewButton("Reset Timer", func() {
+		UpdateTimer("ResetTimer")
+	})
+	hideTimerButton := widget.NewButton("Show/Hide Timer", func() {
+		UpdateTimer("ToggleTimer")
+	})
+	timerContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), starTimerButton, stopTimerButton, resetTimerButton, hideTimerButton, layout.NewSpacer())
+	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, timerContainer)
 	return container
 }
 

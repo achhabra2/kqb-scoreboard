@@ -65,6 +65,18 @@ func UpdateScoreBoard(s *Scoreboard) {
 	}
 }
 
+func UpdateTimer(function string) {
+	for client := range clients {
+		message := []byte(function)
+		err := client.WriteMessage(websocket.TextMessage, message)
+		if err != nil {
+			log.Printf("Websocket error: %s", err)
+			client.Close()
+			delete(clients, client)
+		}
+	}
+}
+
 func StartHTTPServer() {
 	http.HandleFunc("/ws", ws)
 	http.HandleFunc("/echo", echo)

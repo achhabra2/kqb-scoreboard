@@ -86,8 +86,10 @@ body {
 }
 
 .score-text {
-  transform: translateY(15%);
-  font-size: 3em;
+  transform: translateY(-5%) translateX(-5%);
+  line-height: 70px;
+  font-size: 3.5em;
+  text-align: center;
 }
 
 .home-oval-filled {
@@ -174,7 +176,7 @@ body {
 }
 
 .winner-background {
-  outline: 5px solid purple;
+  outline: 5px solid #a055fb;
   outline-offset: -10px;
 }
 
@@ -184,4 +186,43 @@ body {
 
 .away-outline {
   border: 3px #af7e0d solid;
+}
+
+.timer-box {
+  height: 90px;
+  width: 180px;
+  position: fixed;
+  line-height: 90px;
+  font-size: 2.5em;
+  /* top: 50%; */
+  left: 50%;
+  transform: translate(-50%, 0%);
+  background-color: black !important;
+  text-align: center;
+  /* color:white; */
+  /* border: 4px white solid; */
+  border-radius: 6px;
+  animation-name: textColorPalette;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-timing-function: linear; 
+}
+
+@keyframes textColorPalette {
+	0% {
+		color: #f2ae12;
+	}
+	25% {
+		color: #af7e0d;
+	}
+	50% {
+		color: #0192ff;
+	}
+	75% {
+		color: #0061ac;
+	}
+	100% {
+		color: #a055fb;
+	}
 }
