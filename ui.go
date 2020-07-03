@@ -20,20 +20,20 @@ func GameType(a fyne.App) *fyne.Window {
 	IGLButton := widget.NewButton("IGL Match", func() {
 		log.Println("Selected IGL KQB Scoreboard")
 		content := IGLCircuitSelect(win)
-		win.Resize(fyne.NewSize(400, 900))
+		win.Resize(fyne.NewSize(400, 500))
 		win.SetContent(content)
 	})
 	CustomButton := widget.NewButton("Custom Match", func() {
 		log.Println("Selected Custom Match Type")
 		content := CustomTeamSelection(win)
-		win.Resize(fyne.NewSize(400, 900))
+		win.Resize(fyne.NewSize(400, 500))
 		win.SetContent(content)
 	})
 	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(),
 		label, IGLButton, CustomButton)
 
 	win.SetContent(container)
-	win.Resize(fyne.NewSize(400, 900))
+	win.Resize(fyne.NewSize(400, 500))
 	win.Show()
 	return &win
 }

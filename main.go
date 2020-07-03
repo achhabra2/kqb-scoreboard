@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"time"
 
 	"fyne.io/fyne/app"
 )
@@ -70,7 +71,7 @@ func main() {
 }
 
 func GetTeamInfo(url string, c chan []Team) {
-	fmt.Println("Fetching Team Information from IGL...")
+	log.Println("Fetching Team Information from IGL...")
 	resp, err := http.Get(url)
 	if err != nil {
 		// handle error
@@ -78,38 +79,96 @@ func GetTeamInfo(url string, c chan []Team) {
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	// jsonFile, err := os.Open("response.json")
-	// // if we os.Open returns an error then handle it
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// fmt.Println("Successfully Opened users.json")
-	// // defer the closing of our jsonFile so that we can parse it later on
-	// defer jsonFile.Close()
 
-	// byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var result map[string]interface{}
+	var result IGLApiResponse
 	json.Unmarshal([]byte(body), &result)
-	results := result["data"].([]interface{})
 	teams := []Team{}
-	for _, v := range results {
-		t := v.(map[string]interface{})["team"]
-		s := v.(map[string]interface{})["stats"]
-		test := Team{}
-		test.Name = t.(map[string]interface{})["formattedName"].(string)
-		test.Tier = int(t.(map[string]interface{})["tier"].(float64))
-		test.Div = int(t.(map[string]interface{})["div"].(float64))
-		if t.(map[string]interface{})["logo"] != nil {
-			test.Img = t.(map[string]interface{})["logo"].(string)
+	for _, v := range result.Data {
+		team := Team{}
+		t := v.Team
+		s := v.Stats
+
+		team.Name = t.FormattedName
+		team.Tier = int(t.Tier)
+		team.Div = int(t.Div)
+		if team.Img != "" {
+			team.Img = t.Logo
 		} else {
-			test.Img = KQBAvatarImage
+			team.Img = KQBAvatarImage
 		}
-		test.Stats.GamesWon, _ = strconv.Atoi(s.(map[string]interface{})["Games Won"].(string))
-		test.Stats.GamesLost, _ = strconv.Atoi(s.(map[string]interface{})["Games Lost"].(string))
-		test.Stats.MatchesWon, _ = strconv.Atoi(s.(map[string]interface{})["Matches Won"].(string))
-		test.Stats.MatchesLost, _ = strconv.Atoi(s.(map[string]interface{})["Matches Lost"].(string))
-		teams = append(teams, test)
+		team.Stats.GamesWon, _ = strconv.Atoi(s.GamesWon)
+		team.Stats.GamesLost, _ = strconv.Atoi(s.GamesLost)
+		team.Stats.MatchesWon, _ = strconv.Atoi(s.MatchesWon)
+		team.Stats.MatchesLost, _ = strconv.Atoi(s.MatchesLost)
+		teams = append(teams, team)
 	}
+
 	c <- teams
 }
+
+type IGLApiResponse struct {
+	Data []struct {
+		Team struct {
+			ID        string        `json:"_id"`
+			Active    bool          `json:"active"`
+			Dq        bool          `json:"dq"`
+			Logo      string        `json:"logo"`
+			Losses    int           `json:"losses"`
+			PlayerIds []string      `json:"playerIds"`
+			Schedule  []interface{} `json:"schedule"`
+			Status    string        `json:"status"`
+			TeamLimit int           `json:"teamLimit"`
+			Wins      int           `json:"wins"`
+			CaptainID string        `json:"captainId"`
+			CircuitID string        `json:"circuitId"`
+			Tier      float64       `json:tier,omitempty`
+			Div       float64       `json:div,omitempty`
+			CreatedAt time.Time     `json:"createdAt"`
+			UpdatedAt time.Time     `json:"updatedAt"`
+			V         int           `json:"__v"`
+			Invite    struct {
+				Token     string    `json:"token"`
+				CreatedAt time.Time `json:"createdAt"`
+				UpdatedAt time.Time `json:"updatedAt"`
+			} `json:"invite"`
+			FormattedName string `json:"formattedName"`
+			Name          string `json:"name"`
+		} `json:"team"`
+		Player struct {
+		} `json:"player"`
+		Stats struct {
+			MatchesWon  string `json:"Matches Won"`
+			MatchesLost string `json:"Matches Lost"`
+			GameWin     string `json:"Game Win %"`
+			GamesWon    string `json:"Games Won"`
+			GamesLost   string `json:"Games Lost"`
+			MapWin      string `json:"Map Win %"`
+			Kills       string `json:"Kills"`
+			Deaths      string `json:"Deaths"`
+			Berries     string `json:"Berries"`
+			Snail       string `json:"Snail"`
+		} `json:"stats"`
+	} `json:"data"`
+}
+
+// OLD JSON parser
+// results := result["data"].([]interface{})
+// teams := []Team{}
+// for _, v := range results {
+// 	t := v.(map[string]interface{})["team"]
+// 	s := v.(map[string]interface{})["stats"]
+// 	team := Team{}
+// 	team.Name = t.(map[string]interface{})["formattedName"].(string)
+// 	team.Tier = int(t.(map[string]interface{})["tier"].(float64))
+// 	team.Div = int(t.(map[string]interface{})["div"].(float64))
+// 	if t.(map[string]interface{})["logo"] != nil {
+// 		team.Img = t.(map[string]interface{})["logo"].(string)
+// 	} else {
+// 		team.Img = KQBAvatarImage
+// 	}
+// 	team.Stats.GamesWon, _ = strconv.Atoi(s.(map[string]interface{})["Games Won"].(string))
+// 	team.Stats.GamesLost, _ = strconv.Atoi(s.(map[string]interface{})["Games Lost"].(string))
+// 	team.Stats.MatchesWon, _ = strconv.Atoi(s.(map[string]interface{})["Matches Won"].(string))
+// 	team.Stats.MatchesLost, _ = strconv.Atoi(s.(map[string]interface{})["Matches Lost"].(string))
+// 	teams = append(teams, team)
+// }

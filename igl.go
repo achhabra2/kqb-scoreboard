@@ -7,7 +7,9 @@ import (
 	"net/http"
 )
 
-const CircuitAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits?data={%22motherCircuitId%22:%225e4b290a420594ace7e97726%22,%22live%22:false,%22active%22:true,%22hidden%22:false,%20%22game%22:%22KILLER%20QUEEN%20BLACK%22}"
+// const CircuitAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits?data={%22motherCircuitId%22:%225e4b290a420594ace7e97726%22,%22live%22:false,%22active%22:true,%22hidden%22:false,%20%22game%22:%22KILLER%20QUEEN%20BLACK%22}"
+// const CircuitAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits?data=%7B%22live%22:true,%22hidden%22:false,%22game%22:%22KILLER%20QUEEN%20BLACK%22%7D"
+const CircuitAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits?data=%7B%22motherCircuitId%22:%225ec8428a2cbb1c4439c29e6c%22,%22live%22:false,%22active%22:true,%22hidden%22:false,%22game%22:%22KILLER%20QUEEN%20BLACK%22%7D"
 
 type IGLCircuit struct {
 	ID     string `json:"id"`
