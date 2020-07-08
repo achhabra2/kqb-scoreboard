@@ -91,7 +91,7 @@ func GetTeamInfo(url string, c chan []Team) {
 		team.Name = t.FormattedName
 		team.Tier = int(t.Tier)
 		team.Div = int(t.Div)
-		if team.Img != "" {
+		if t.Logo != "" {
 			team.Img = t.Logo
 		} else {
 			team.Img = KQBAvatarImage
