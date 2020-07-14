@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -39,6 +40,7 @@ type Stats struct {
 var h Team = Team{"Blue Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var a Team = Team{"Gold Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var s Scoreboard = Scoreboard{&h, &a, 0, 0, 0, 0}
+var logoPath string
 
 func setupLogs() {
 	f, err := os.OpenFile("./output.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
@@ -56,6 +58,9 @@ func setupLogs() {
 func main() {
 	// Configure log output to file
 	setupLogs()
+
+	// Create Directory For Logos
+	SetupLogoDirectory()
 
 	// Setup HTTP handler and websocket handler
 	StartHTTPServer()
@@ -151,24 +156,30 @@ type IGLApiResponse struct {
 	} `json:"data"`
 }
 
-// OLD JSON parser
-// results := result["data"].([]interface{})
-// teams := []Team{}
-// for _, v := range results {
-// 	t := v.(map[string]interface{})["team"]
-// 	s := v.(map[string]interface{})["stats"]
-// 	team := Team{}
-// 	team.Name = t.(map[string]interface{})["formattedName"].(string)
-// 	team.Tier = int(t.(map[string]interface{})["tier"].(float64))
-// 	team.Div = int(t.(map[string]interface{})["div"].(float64))
-// 	if t.(map[string]interface{})["logo"] != nil {
-// 		team.Img = t.(map[string]interface{})["logo"].(string)
-// 	} else {
-// 		team.Img = KQBAvatarImage
-// 	}
-// 	team.Stats.GamesWon, _ = strconv.Atoi(s.(map[string]interface{})["Games Won"].(string))
-// 	team.Stats.GamesLost, _ = strconv.Atoi(s.(map[string]interface{})["Games Lost"].(string))
-// 	team.Stats.MatchesWon, _ = strconv.Atoi(s.(map[string]interface{})["Matches Won"].(string))
-// 	team.Stats.MatchesLost, _ = strconv.Atoi(s.(map[string]interface{})["Matches Lost"].(string))
-// 	teams = append(teams, team)
-// }
+// SetupLogoDirectory creates a directory to cache the local logo files
+func SetupLogoDirectory() {
+
+	// Get Current Working Directory
+	path, err := os.Getwd()
+	if err != nil {
+		log.Println(err)
+	}
+	fmt.Println(path)
+
+	// Set Logo Path
+	logoPath = filepath.Join(path, "logo")
+	fmt.Println(logoPath)
+
+	// Create directory if it doesn't exist
+	if _, err := os.Stat(logoPath); os.IsNotExist(err) {
+		os.Mkdir(logoPath, 0755)
+	}
+}
+
+func tidyUp() {
+
+	// Remove logopath directory and files
+	os.RemoveAll(logoPath)
+	os.Remove("./output.log")
+	log.Println("Exiting...")
+}

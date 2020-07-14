@@ -82,6 +82,7 @@ func StartHTTPServer() {
 	http.HandleFunc("/echo", echo)
 	box := packr.New("static", "./static")
 	http.Handle("/", http.FileServer(box))
+	http.Handle("/logo", http.FileServer(http.Dir(logoPath)))
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", nil))
 	}()

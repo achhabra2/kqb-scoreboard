@@ -112,6 +112,8 @@ func IGLTeamSelection(w fyne.Window, apiUrl string) *fyne.Container {
 	saveButton := widget.NewButton("Start Scoreboard", func() {
 		log.Println("Saved.")
 		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0}
+		UpdateTeamLogo(&blueTeam)
+		UpdateTeamLogo(&goldTeam)
 		StartScoreboard(w)
 	})
 
@@ -303,8 +305,4 @@ func ProgressIndicator() *fyne.Container {
 	infinite := widget.NewProgressBarInfinite()
 	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, infinite)
 	return container
-}
-
-func tidyUp() {
-	log.Println("Exiting...")
 }
