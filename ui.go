@@ -204,7 +204,7 @@ func IGLCircuitSelect(w fyne.Window) *fyne.Container {
 	return container
 }
 
-func ScoreboardContent(w fyne.Window) *fyne.Container {
+func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Container {
 	scoreboardLabel := widget.NewLabel("Scoreboard Controller")
 	scoreboardLabel.Alignment = fyne.TextAlignCenter
 	scoreboardLabel.TextStyle.Bold = true
@@ -221,41 +221,33 @@ func ScoreboardContent(w fyne.Window) *fyne.Container {
 	blueScoreboard := fyne.NewContainerWithLayout(layout.NewFormLayout(), mapsLabel, blueMaps, setsLabel, blueSets)
 	goldScoreboard := fyne.NewContainerWithLayout(layout.NewFormLayout(), mapsLabel, goldMaps, setsLabel, goldSets)
 	scoreboardContainer := fyne.NewContainerWithLayout(layout.NewGridLayout(2), blueLabel, goldLabel, blueScoreboard, goldScoreboard)
-	incrementBlue := widget.NewButtonWithIcon("Increment Blue", theme.ContentAddIcon(), func() {
-		s.IncrementHome()
-		UpdateScoreBoard(&s)
+	RefreshScoreboardUI := func() {
 		blueMaps.Text = strconv.Itoa(s.HomeMaps)
 		blueSets.Text = strconv.Itoa(s.HomeGames)
 		goldMaps.Text = strconv.Itoa(s.AwayMaps)
 		goldSets.Text = strconv.Itoa(s.AwayGames)
 		scoreboardContainer.Refresh()
+	}
+	SetupEventHooks(RefreshScoreboardUI)
+	incrementBlue := widget.NewButtonWithIcon("Increment Blue", theme.ContentAddIcon(), func() {
+		s.IncrementHome()
+		UpdateScoreBoard(&s)
+		RefreshScoreboardUI()
 	})
 	incrementGold := widget.NewButtonWithIcon("Increment Gold", theme.ContentAddIcon(), func() {
 		s.IncrementAway()
 		UpdateScoreBoard(&s)
-		blueMaps.Text = strconv.Itoa(s.HomeMaps)
-		blueSets.Text = strconv.Itoa(s.HomeGames)
-		goldMaps.Text = strconv.Itoa(s.AwayMaps)
-		goldSets.Text = strconv.Itoa(s.AwayGames)
-		scoreboardContainer.Refresh()
+		RefreshScoreboardUI()
 	})
 	decrementBlue := widget.NewButtonWithIcon("Decrement Blue", theme.ContentClearIcon(), func() {
 		s.DecrementHome()
 		UpdateScoreBoard(&s)
-		blueMaps.Text = strconv.Itoa(s.HomeMaps)
-		blueSets.Text = strconv.Itoa(s.HomeGames)
-		goldMaps.Text = strconv.Itoa(s.AwayMaps)
-		goldSets.Text = strconv.Itoa(s.AwayGames)
-		scoreboardContainer.Refresh()
+		RefreshScoreboardUI()
 	})
 	decrementGold := widget.NewButtonWithIcon("Decrement Gold", theme.ContentClearIcon(), func() {
 		s.DecrementAway()
 		UpdateScoreBoard(&s)
-		blueMaps.Text = strconv.Itoa(s.HomeMaps)
-		blueSets.Text = strconv.Itoa(s.HomeGames)
-		goldMaps.Text = strconv.Itoa(s.AwayMaps)
-		goldSets.Text = strconv.Itoa(s.AwayGames)
-		scoreboardContainer.Refresh()
+		RefreshScoreboardUI()
 	})
 	blueContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), incrementBlue, incrementGold, layout.NewSpacer())
 	goldContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), decrementBlue, decrementGold, layout.NewSpacer())
@@ -267,12 +259,8 @@ func ScoreboardContent(w fyne.Window) *fyne.Container {
 		s.HomeMaps = 0
 		s.HomeGames = 0
 		s.AwayGames = 0
-		s.HomeGames = 0
-		blueMaps.Text = strconv.Itoa(s.HomeMaps)
-		blueSets.Text = strconv.Itoa(s.HomeGames)
-		goldMaps.Text = strconv.Itoa(s.AwayMaps)
-		goldSets.Text = strconv.Itoa(s.AwayGames)
-		scoreboardContainer.Refresh()
+		s.AwayMaps = 0
+		RefreshScoreboardUI()
 		UpdateScoreBoard(&s)
 	})
 	resetButtonContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), resetButton, layout.NewSpacer())
@@ -288,14 +276,19 @@ func ScoreboardContent(w fyne.Window) *fyne.Container {
 	hideTimerButton := widget.NewButton("Show/Hide Timer", func() {
 		UpdateTimer("ToggleTimer")
 	})
+	aboutButton := widget.NewButton("About", func() {
+		ShowAboutWindow()
+	})
+	aboutContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), aboutButton, layout.NewSpacer())
 	timerContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), starTimerButton, stopTimerButton, resetTimerButton, hideTimerButton, layout.NewSpacer())
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, timerContainer)
+	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, timerContainer, aboutContainer)
 	return container
 }
 
 func StartScoreboard(w fyne.Window) {
 	w.Resize(fyne.NewSize(400, 500))
-	w.SetContent(ScoreboardContent(w))
+	ScoreboardUIContainer := ScoreboardContent(w, AddScoreboardHotkeys)
+	w.SetContent(ScoreboardUIContainer)
 }
 
 func ProgressIndicator() *fyne.Container {
@@ -305,4 +298,24 @@ func ProgressIndicator() *fyne.Container {
 	infinite := widget.NewProgressBarInfinite()
 	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, infinite)
 	return container
+}
+
+func AboutPage() *fyne.Container {
+	label := widget.NewLabel("About KQB Scoreboard")
+	label.Alignment = fyne.TextAlignCenter
+	label.TextStyle.Bold = true
+
+	author := widget.NewLabel("Author: prosive AKA Aman @ github.com/achhabra2")
+	author.Alignment = fyne.TextAlignLeading
+
+	hotkeys := widget.NewLabel("Hotkeys: \n CTRL + Shift + R: Reset Timer \n CTRL + Shift + T: Toggle Timer Start / Stop \n CTRL + Shift + B: Increment Blue Wins \n CTRL + Shift + G: Increment Gold Wins")
+	hotkeys.Alignment = fyne.TextAlignLeading
+	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, author, hotkeys)
+	return container
+}
+
+func ShowAboutWindow() {
+	aboutWindow := FyneApp.NewWindow("About")
+	aboutWindow.SetContent(AboutPage())
+	aboutWindow.Show()
 }

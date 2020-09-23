@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"time"
 
+	"fyne.io/fyne"
 	"fyne.io/fyne/app"
 )
 
@@ -41,6 +42,7 @@ var h Team = Team{"Blue Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var a Team = Team{"Gold Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var s Scoreboard = Scoreboard{&h, &a, 0, 0, 0, 0}
 var logoPath string
+var FyneApp fyne.App
 
 func setupLogs() {
 	f, err := os.OpenFile("./output.log", os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
@@ -66,10 +68,13 @@ func main() {
 	StartHTTPServer()
 
 	// Create Fyne App
-	myApp := app.New()
-	myApp.SetIcon(resourceIconPng)
-	_ = GameType(myApp)
-	myApp.Run()
+	FyneApp = app.New()
+	FyneApp.SetIcon(resourceIconPng)
+	_ = GameType(FyneApp)
+
+	// Add Event Hotkey Bindings
+	go AddEventHotkeys()
+	FyneApp.Run()
 
 	// Called before application exist
 	tidyUp()
