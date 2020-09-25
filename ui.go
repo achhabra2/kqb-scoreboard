@@ -305,12 +305,13 @@ func AboutPage() *fyne.Container {
 	label.Alignment = fyne.TextAlignCenter
 	label.TextStyle.Bold = true
 
-	author := widget.NewLabel("Author: prosive AKA Aman @ github.com/achhabra2")
+	author := widget.NewLabel("Author: Aman AKA Prosive")
 	author.Alignment = fyne.TextAlignLeading
-
+	githubURL, _ := url.Parse("https://github.com/achhabra2/kqb-scoreboard")
+	githubWidget := widget.NewHyperlink("Github Repo", githubURL)
 	hotkeys := widget.NewLabel("Hotkeys: \n CTRL + Shift + R: Reset Timer \n CTRL + Shift + T: Toggle Timer Start / Stop \n CTRL + Shift + B: Increment Blue Wins \n CTRL + Shift + G: Increment Gold Wins")
 	hotkeys.Alignment = fyne.TextAlignLeading
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, author, hotkeys)
+	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, author, githubWidget, hotkeys)
 	return container
 }
 
