@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-const CircuitAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits?data=%7B%22motherCircuitId%22:%225f380956d98a1a47bb52b692%22,%22live%22:false,%22active%22:true,%22hidden%22:false,%22game%22:%22KILLER%20QUEEN%20BLACK%22%7D"
+const CircuitAPIURL = "https://indy-gaming-league-api.herokuapp.com/api/circuits?data=%7B%22motherCircuitId%22:%225fa573f303288ded83f2f36e%22,%22live%22:false,%22active%22:true,%22hidden%22:false,%22game%22:%22KILLER%20QUEEN%20BLACK%22%7D"
 
 type IGLCircuit struct {
 	ID     string `json:"id"`
