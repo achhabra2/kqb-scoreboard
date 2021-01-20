@@ -63,10 +63,12 @@ body {
 
 .blue-text {
   color: #0192ff;
+  text-shadow: 2px 2px 8px #0192ff;
 }
 
 .gold-text {
   color: #f2ae12;
+  text-shadow: 2px 2px 8px #f2ae12;
 }
 
 .home-box {
@@ -97,7 +99,7 @@ body {
   height: 4rem;
   background: #0192ff;
   border-radius: 50px / 25px;
-  border: 3px #0061ac solid;
+  border: 4px #0061ac solid;
   transform: rotate(-10deg);
   display:inline-block;
   }
@@ -107,7 +109,7 @@ body {
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
-  border: 3px #0061ac solid;
+  border: 4px #0061ac solid;
   transform: rotate(-10deg);
   display:inline-block;
   }
@@ -117,7 +119,7 @@ body {
   height: 4rem;
   background: #888888;
   border-radius: 50px / 25px;
-  border: 3px #af7e0d solid;
+  border: 4px #af7e0d solid;
   transform: rotate(10deg);
   display:inline-block;
   }
@@ -128,7 +130,7 @@ body {
   width: 1.5rem;
   height: 4rem;
   border-radius: 50px / 25px;
-  border: 3px #af7e0d solid;
+  border: 4px #af7e0d solid;
   transform: rotate(10deg);
   display:inline-block;
 }
@@ -181,11 +183,13 @@ body {
 }
 
 .home-outline {
-  border: 3px #0061ac solid;
+  border: 4px #0192ff solid;
+  box-shadow: 2px 2px 6px #0192ff;
 }
 
 .away-outline {
-  border: 3px #af7e0d solid;
+  border: 4px #f2ae12 solid;
+  box-shadow: 2px 2px 6px #f2ae12;
 }
 
 .timer-box {
@@ -211,18 +215,45 @@ body {
 
 @keyframes textColorPalette {
 	0% {
-		color: #f2ae12;
+    border: 5px solid #f2ae12;
 	}
 	25% {
-		color: #af7e0d;
+    border: 5px solid #af7e0d;
 	}
 	50% {
-		color: #0192ff;
+    border: 5px solid #0192ff;
 	}
 	75% {
-		color: #0061ac;
+    border: 5px solid #0061ac;
 	}
 	100% {
-		color: #a055fb;
+    border: 5px solid #a055fb;
 	}
+}
+
+.set-box {
+  height: 90px;
+  width: 200px;
+  position: fixed;
+  /* line-height: 90px; */
+  text-align: left;
+  vertical-align: middle;
+  font-size: 2em;
+  /* top: 50%; */
+  left: 50%;
+  padding: 8px;
+  transform: translate(-50%, 0%);
+  background-color: black !important;
+  border-radius: 6px;
+  animation-name: textColorPalette;
+	animation-duration: 5s;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-timing-function: linear; 
+}
+
+
+table, td {
+  width: 100%;
+  padding: 5px;
 }

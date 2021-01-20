@@ -10,12 +10,23 @@ type Scoreboard struct {
 	AwayMaps  int
 	HomeGames int
 	AwayGames int
+	//	BlueBerries int
+	//	GoldBerries int
+	//	BlueEggs    int
+	//	GoldEggs    int
+	Sets []ScoreboardSet
+}
+
+type ScoreboardSet struct {
+	Away int
+	Home int
 }
 
 // IncrementHome accounts for when the home team wins a map
 func (s *Scoreboard) IncrementHome() {
 	s.HomeMaps++
 	if s.HomeMaps == 3 {
+		s.Sets = append(s.Sets, ScoreboardSet{Away: s.AwayMaps, Home: s.HomeMaps})
 		s.HomeMaps = 0
 		s.AwayMaps = 0
 		s.HomeGames++
@@ -35,6 +46,7 @@ func (s *Scoreboard) DecrementHome() {
 func (s *Scoreboard) IncrementAway() {
 	s.AwayMaps++
 	if s.AwayMaps == 3 {
+		s.Sets = append(s.Sets, ScoreboardSet{Away: s.AwayMaps, Home: s.HomeMaps})
 		s.HomeMaps = 0
 		s.AwayMaps = 0
 		s.AwayGames++

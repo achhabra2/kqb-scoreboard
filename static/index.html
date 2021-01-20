@@ -60,19 +60,35 @@
                 document.getElementById("away-img").src = data.Away.Img
             }
             updateMapCSS(data)
-            if (data.HomeGames >= 3) {
-                document.getElementById("home-winner").classList.add("winner-background")
-            } else {
-                if(document.getElementById("home-winner").classList.contains("winner-background")) {
-                    document.getElementById("home-winner").classList.remove("winner-background")
-                }
+            // if (data.HomeGames >= 3) {
+            //     document.getElementById("home-winner").classList.add("winner-background")
+            // } else {
+            //     if(document.getElementById("home-winner").classList.contains("winner-background")) {
+            //         document.getElementById("home-winner").classList.remove("winner-background")
+            //     }
+            // }
+            // if (data.AwayGames >= 3) {
+            //     document.getElementById("away-winner").classList.add("winner-background")
+            // } else {
+            //     if(document.getElementById("away-winner").classList.contains("winner-background")) {
+            //         document.getElementById("away-winner").classList.remove("winner-background")
+            //     }
+            // }
+            let homeRow = document.getElementById("home-row")
+            let awayRow = document.getElementById("away-row")
+            let x = homeRow.cells.length
+            let y = awayRow.cells.length
+            for(let i = x-1; i>0 ; i--) {
+                homeRow.deleteCell(i)
             }
-            if (data.AwayGames >= 3) {
-                document.getElementById("away-winner").classList.add("winner-background")
-            } else {
-                if(document.getElementById("away-winner").classList.contains("winner-background")) {
-                    document.getElementById("away-winner").classList.remove("winner-background")
-                }
+            for(let j = y-1; j>0 ; j--) {
+                awayRow.deleteCell(j)
+            }
+            for(let [idx,set] of data.Sets.entries()) {
+                let homeCell = homeRow.insertCell(-1)
+                let awayCell = awayRow.insertCell(-1)
+                homeCell.innerText = set.Home
+                awayCell.innerText = set.Away
             }
         }
         function DarkModeToggle() {
@@ -251,6 +267,16 @@
     <div id="chroma-box" class="chroma-box"></div>
     <div id="timer-box" class="timer-box">
         <span id="timer-text">00:00</span>
+    </div>
+    <div id="set-box" class="set-box">
+        <table id="set-table">
+            <tr id="away-row" class="blue-text">
+                <td>A</td>
+            </tr>
+            <tr id="home-row" class="gold-text">
+                <td>H</td>
+            </tr>
+        </table>
     </div>
     <div id="away-winner" class="right away-box">
         <article class="wrapper-right">

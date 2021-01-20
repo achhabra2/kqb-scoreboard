@@ -40,7 +40,7 @@ type Stats struct {
 
 var h Team = Team{"Blue Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var a Team = Team{"Gold Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
-var s Scoreboard = Scoreboard{&h, &a, 0, 0, 0, 0}
+var s Scoreboard = Scoreboard{&h, &a, 0, 0, 0, 0, []ScoreboardSet{}}
 var logoPath string
 var FyneApp fyne.App
 

@@ -83,7 +83,7 @@ func CustomTeamSelection(w fyne.Window) *fyne.Container {
 		log.Println("Scoreboard Starting")
 		blueTeam := Team{blueInput.Text, "avatar.png", 1, 1, Stats{0, 0, blueWinsInt, blueLossInt}}
 		goldTeam := Team{goldInput.Text, "avatar.png", 1, 1, Stats{0, 0, goldWinsInt, goldLossInt}}
-		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0}
+		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0, []ScoreboardSet{}}
 		StartScoreboard(w)
 	})
 	saveButton.Style = widget.PrimaryButton
@@ -111,7 +111,7 @@ func IGLTeamSelection(w fyne.Window, apiUrl string) *fyne.Container {
 
 	saveButton := widget.NewButton("Start Scoreboard", func() {
 		log.Println("Saved.")
-		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0}
+		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0, []ScoreboardSet{}}
 		UpdateTeamLogo(&blueTeam)
 		UpdateTeamLogo(&goldTeam)
 		StartScoreboard(w)
@@ -260,6 +260,7 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 		s.HomeGames = 0
 		s.AwayGames = 0
 		s.AwayMaps = 0
+		s.Sets = []ScoreboardSet{}
 		RefreshScoreboardUI()
 		UpdateScoreBoard(&s)
 	})
