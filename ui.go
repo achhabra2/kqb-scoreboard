@@ -6,10 +6,11 @@ import (
 	"net/url"
 	"strconv"
 
-	"fyne.io/fyne"
-	"fyne.io/fyne/layout"
-	"fyne.io/fyne/theme"
-	"fyne.io/fyne/widget"
+	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/layout"
+	"fyne.io/fyne/v2/theme"
+	"fyne.io/fyne/v2/widget"
+	"fyne.io/fyne/v2/dialog"
 )
 
 func GameType(a fyne.App) *fyne.Window {
@@ -17,9 +18,9 @@ func GameType(a fyne.App) *fyne.Window {
 	label.TextStyle.Bold = true
 	label.Alignment = fyne.TextAlignCenter
 	win := a.NewWindow("KQB Scoreboard App")
-	IGLButton := widget.NewButton("IGL Match", func() {
-		log.Println("Selected IGL KQB Scoreboard")
-		content := IGLCircuitSelect(win)
+	IGLButton := widget.NewButton("BGL Match", func() {
+		log.Println("Selected BGL KQB Scoreboard")
+		content := BGLMatchSelection(win)
 		win.Resize(fyne.NewSize(400, 500))
 		win.SetContent(content)
 	})
@@ -35,6 +36,7 @@ func GameType(a fyne.App) *fyne.Window {
 	win.SetContent(container)
 	win.Resize(fyne.NewSize(400, 500))
 	win.Show()
+	go CheckForUpdates(win)
 	return &win
 }
 
@@ -86,13 +88,13 @@ func CustomTeamSelection(w fyne.Window) *fyne.Container {
 		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0, []ScoreboardSet{}}
 		StartScoreboard(w)
 	})
-	saveButton.Style = widget.PrimaryButton
+	saveButton.Importance = widget.HighImportance
 
 	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, blueInput, blueWLContainer, goldInput, goldWLContainer, saveButton)
 	return container
 }
 
-func IGLTeamSelection(w fyne.Window, apiUrl string) *fyne.Container {
+func BGLMatchSelection(w fyne.Window) *fyne.Container {
 	label := widget.NewLabel("Select Teams")
 	label.Alignment = fyne.TextAlignCenter
 	label.TextStyle.Bold = true
@@ -102,7 +104,7 @@ func IGLTeamSelection(w fyne.Window, apiUrl string) *fyne.Container {
 	ch := make(chan []Team)
 
 	w.SetContent(ProgressIndicator())
-	go GetTeamInfo(apiUrl, ch)
+	go GetTeamInfo(ch)
 	teams := <-ch
 
 	options := make([]string, len(teams))
@@ -117,7 +119,8 @@ func IGLTeamSelection(w fyne.Window, apiUrl string) *fyne.Container {
 		StartScoreboard(w)
 	})
 
-	saveButton.Style = widget.PrimaryButton
+	// saveButton.Style = widget.PrimaryButton
+	saveButton.Importance = widget.HighImportance
 	saveButton.Disable()
 
 	for i, team := range teams {
@@ -150,56 +153,6 @@ func IGLTeamSelection(w fyne.Window, apiUrl string) *fyne.Container {
 	goldTeamContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), goldLabel, goldTeamSelect, layout.NewSpacer())
 
 	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, blueTeamContainer, goldTeamContainer, saveButton)
-
-	return container
-}
-
-func IGLCircuitSelect(w fyne.Window) *fyne.Container {
-	label := widget.NewLabel("Select Circuit")
-	label.Alignment = fyne.TextAlignCenter
-	label.TextStyle.Bold = true
-
-	ch := make(chan []IGLCircuit)
-
-	w.SetContent(ProgressIndicator())
-	go GetIGLCircuits(ch)
-	circuits := <-ch
-
-	kqbCircuits := []IGLCircuit{}
-
-	for _, circuit := range circuits {
-		if circuit.Game == "KILLER QUEEN BLACK" {
-			kqbCircuits = append(kqbCircuits, circuit)
-		}
-	}
-
-	options := make([]string, len(kqbCircuits))
-
-	for i, circuit := range kqbCircuits {
-		options[i] = circuit.Region + " " + circuit.Game
-	}
-
-	var url string
-
-	nextButton := widget.NewButton("Next", func() {
-		log.Println("Saved.")
-		w.SetContent(IGLTeamSelection(w, url))
-	})
-
-	nextButton.Style = widget.PrimaryButton
-	nextButton.Disable()
-
-	circuitSelect := widget.NewSelect(options, func(value string) {
-		for i, option := range options {
-			if option == value {
-				url = fmt.Sprintf("%s%s/results?bucket=igl-teamlogopics", IglAPIURL, kqbCircuits[i].ID)
-			}
-		}
-
-		nextButton.Enable()
-	})
-
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, circuitSelect, nextButton)
 
 	return container
 }
@@ -320,4 +273,26 @@ func ShowAboutWindow() {
 	aboutWindow := FyneApp.NewWindow("About")
 	aboutWindow.SetContent(AboutPage())
 	aboutWindow.Show()
+}
+
+
+func CheckForUpdates(w fyne.Window) {
+	shouldUpdate, latestVersion := checkForUpdate()
+	if shouldUpdate {
+		updateMessage := fmt.Sprintf("New Version Available, would you like to update to v%s", latestVersion)
+		confirmDialog := dialog.NewConfirm("Update Checker", updateMessage, func(action bool) {
+			if action {
+				log.Println("Update clicked")
+				updated := doSelfUpdate()
+				if updated {
+					updatedDialog := dialog.NewInformation("Update Status", "Update Succeeded, please restart", w)
+					updatedDialog.Show()
+				} else {
+					updatedDialog := dialog.NewInformation("Update Status", "Update Failed", w)
+					updatedDialog.Show()
+				}
+			}
+		}, w)
+		confirmDialog.Show()
+	}
 }

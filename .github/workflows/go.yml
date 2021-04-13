@@ -1,0 +1,44 @@
+name: "tagged-release"
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+        
+    - name: Setup Fyne
+      run: go get fyne.io/fyne/v2/cmd/fyne
+
+    - name: Setup Packr
+      run: go get -u github.com/gobuffalo/packr/v2/packr2
+
+    - name: Packr
+      run: packr2
+
+    - name: Build
+      run: go build .
+
+    - name: Fyne Release
+      run: fyne package -os windows -icon icon.png
+
+    - uses: papeloto/action-zip@v1
+      with:
+        files: kqb-scoreboard.exe
+        dest: kqb-scoreboard-windows-amd64.zip
+
+    - uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: false
+        files: kqb-scoreboard-windows-amd64.zip

@@ -63,12 +63,12 @@ body {
 
 .blue-text {
   color: #0192ff;
-  text-shadow: 2px 2px 8px #0192ff;
+  text-shadow: 2px 2px 6px #0192ff;
 }
 
 .gold-text {
   color: #f2ae12;
-  text-shadow: 2px 2px 8px #f2ae12;
+  text-shadow: 2px 2px 6px #f2ae12;
 }
 
 .home-box {
@@ -233,12 +233,12 @@ body {
 
 .set-box {
   height: 90px;
-  width: 200px;
+  width: 300px;
   position: fixed;
   /* line-height: 90px; */
   text-align: left;
   vertical-align: middle;
-  font-size: 2em;
+  font-size: 1.9em;
   /* top: 50%; */
   left: 50%;
   padding: 8px;
@@ -255,5 +255,16 @@ body {
 
 table, td {
   width: 100%;
-  padding: 5px;
+  height: 100%;
+  padding: 1px !important;
+}
+
+.map-score {
+  text-align: center !important;
+}
+
+.row-border {
+  border: 2px solid #a055fb;
+  border-radius: 6px;
+  box-shadow: 2px 2px 6px #a055fb;
 }
