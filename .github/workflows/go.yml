@@ -20,11 +20,11 @@ jobs:
     - name: Setup Fyne
       run: go get fyne.io/fyne/v2/cmd/fyne
 
-    - name: Setup Packr
-      run: go get -u github.com/gobuffalo/packr/v2/packr2
+    # - name: Setup Packr
+    #   run: go get -u github.com/gobuffalo/packr/v2/packr2
 
-    - name: Packr
-      run: packr2
+    # - name: Packr
+    #   run: packr2
 
     - name: Build
       run: go build .
