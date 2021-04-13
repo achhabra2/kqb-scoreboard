@@ -1,6 +1,6 @@
 module github.com/achhabra2/kqb-scoreboard
 
-go 1.14
+go 1.15
 
 require (
 	fyne.io/fyne v1.4.3
