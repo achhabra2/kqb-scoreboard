@@ -12,6 +12,7 @@ import (
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
+	"github.com/aquilax/truncate"
 )
 
 func GameType(a fyne.App) *fyne.Window {
@@ -31,10 +32,9 @@ func GameType(a fyne.App) *fyne.Window {
 		win.Resize(fyne.NewSize(400, 500))
 		win.SetContent(content)
 	})
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(),
-		label, IGLButton, CustomButton)
+	cont := container.NewVBox(label, IGLButton, CustomButton)
 
-	win.SetContent(container)
+	win.SetContent(cont)
 	win.Resize(fyne.NewSize(400, 500))
 	win.Show()
 	go CheckForUpdates(win)
@@ -79,8 +79,8 @@ func CustomTeamSelection(w fyne.Window) *fyne.Container {
 		goldLossInt, _ = strconv.Atoi(value)
 	})
 	goldStandingsLabel := widget.NewLabel("Blue Wins-Losses")
-	blueWLContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), blueStandingsLabel, blueWins, blueLoss)
-	goldWLContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), goldStandingsLabel, goldWins, goldLoss)
+	blueWLContainer := container.NewHBox(blueStandingsLabel, blueWins, blueLoss)
+	goldWLContainer := container.NewHBox(goldStandingsLabel, goldWins, goldLoss)
 
 	saveButton := widget.NewButton("Start Scoreboard", func() {
 		log.Println("Scoreboard Starting")
@@ -91,8 +91,8 @@ func CustomTeamSelection(w fyne.Window) *fyne.Container {
 	})
 	saveButton.Importance = widget.HighImportance
 
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, blueInput, blueWLContainer, goldInput, goldWLContainer, saveButton)
-	return container
+	cont := container.NewVBox(label, blueInput, blueWLContainer, goldInput, goldWLContainer, saveButton)
+	return cont
 }
 
 func BGLMatchSelection(w fyne.Window) *fyne.Container {
@@ -138,7 +138,11 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 	matchSelect := widget.NewSelect(matchOptions, func(value string) {
 		selectedMatchTeams := matchMap[value]
 		teamOptions := []string{selectedMatchTeams[0].Name, selectedMatchTeams[1].Name}
-		blueTeamSelect.Options = teamOptions
+		teamOptionsFormatted := make([]string, len(teamOptions))
+		for idx, opt := range teamOptions {
+			teamOptionsFormatted[idx] = formatTeamName(opt)
+		}
+		blueTeamSelect.Options = teamOptionsFormatted
 		blueTeamSelect.OnChanged = func(val string) {
 			idx := blueTeamSelect.SelectedIndex()
 			blueTeam = selectedMatchTeams[idx]
@@ -147,7 +151,7 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 				saveButton.Enable()
 			}
 		}
-		goldTeamSelect.Options = teamOptions
+		goldTeamSelect.Options = teamOptionsFormatted
 		goldTeamSelect.OnChanged = func(val string) {
 			idx := goldTeamSelect.SelectedIndex()
 			goldTeam = selectedMatchTeams[idx]
@@ -163,7 +167,7 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 		goldTeamContainer.Show()
 	})
 
-	matchSelectContainer := container.NewHBox(matchLabel, matchSelect)
+	matchSelectContainer := container.NewHBox(layout.NewSpacer(), matchLabel, matchSelect, layout.NewSpacer())
 
 	container := container.NewVBox(label, matchSelectContainer, blueTeamContainer, goldTeamContainer, saveButton)
 
@@ -174,9 +178,9 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 	scoreboardLabel := widget.NewLabel("Scoreboard Controller")
 	scoreboardLabel.Alignment = fyne.TextAlignCenter
 	scoreboardLabel.TextStyle.Bold = true
-	blueLabel := widget.NewLabel(fmt.Sprintf("%s (Blue)", s.Home.Name))
+	blueLabel := widget.NewLabel(fmt.Sprintf("%s (Blue)", formatTeamName(s.Home.Name)))
 	blueLabel.Alignment = fyne.TextAlignCenter
-	goldLabel := widget.NewLabel(fmt.Sprintf("%s (Gold)", s.Away.Name))
+	goldLabel := widget.NewLabel(fmt.Sprintf("%s (Gold)", formatTeamName(s.Away.Name)))
 	goldLabel.Alignment = fyne.TextAlignCenter
 	mapsLabel := widget.NewLabel("Maps: ")
 	setsLabel := widget.NewLabel("Sets: ")
@@ -215,8 +219,9 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 		UpdateScoreBoard(&s)
 		RefreshScoreboardUI()
 	})
-	blueContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), incrementBlue, incrementGold, layout.NewSpacer())
-	goldContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), decrementBlue, decrementGold, layout.NewSpacer())
+
+	blueContainer := container.NewHBox(layout.NewSpacer(), incrementBlue, incrementGold, layout.NewSpacer())
+	goldContainer := container.NewHBox(layout.NewSpacer(), decrementBlue, decrementGold, layout.NewSpacer())
 	scoreboardURL, _ := url.Parse("http://localhost:8080")
 	link := widget.NewHyperlink("Scoreboard", scoreboardURL)
 	link.Alignment = fyne.TextAlignCenter
@@ -230,7 +235,7 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 		RefreshScoreboardUI()
 		UpdateScoreBoard(&s)
 	})
-	resetButtonContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), resetButton, layout.NewSpacer())
+	resetButtonContainer := container.NewHBox(layout.NewSpacer(), resetButton, layout.NewSpacer())
 	starTimerButton := widget.NewButton("Start Timer", func() {
 		UpdateTimer("StartTimer")
 	})
@@ -246,9 +251,9 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 	aboutButton := widget.NewButton("About", func() {
 		ShowAboutWindow()
 	})
-	aboutContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), aboutButton, layout.NewSpacer())
-	timerContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), starTimerButton, stopTimerButton, resetTimerButton, hideTimerButton, layout.NewSpacer())
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, timerContainer, aboutContainer)
+	aboutContainer := container.NewHBox(layout.NewSpacer(), aboutButton, layout.NewSpacer())
+	timerContainer := container.NewHBox(layout.NewSpacer(), starTimerButton, stopTimerButton, resetTimerButton, hideTimerButton, layout.NewSpacer())
+	container := container.NewVBox(scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, timerContainer, aboutContainer)
 	return container
 }
 
@@ -263,7 +268,7 @@ func ProgressIndicator() *fyne.Container {
 	label.Alignment = fyne.TextAlignCenter
 	label.TextStyle.Bold = true
 	infinite := widget.NewProgressBarInfinite()
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, infinite)
+	container := container.NewVBox(label, infinite)
 	return container
 }
 
@@ -278,7 +283,7 @@ func AboutPage() *fyne.Container {
 	githubWidget := widget.NewHyperlink("Github Repo", githubURL)
 	hotkeys := widget.NewLabel("Hotkeys: \n CTRL + Shift + R: Reset Timer \n CTRL + Shift + T: Toggle Timer Start / Stop \n CTRL + Shift + B: Increment Blue Wins \n CTRL + Shift + G: Increment Gold Wins")
 	hotkeys.Alignment = fyne.TextAlignLeading
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, author, githubWidget, hotkeys)
+	container := container.NewVBox(label, author, githubWidget, hotkeys)
 	return container
 }
 
@@ -307,4 +312,8 @@ func CheckForUpdates(w fyne.Window) {
 		}, w)
 		confirmDialog.Show()
 	}
+}
+
+func formatTeamName(name string) string {
+	return truncate.Truncate(name, 18, "...", truncate.PositionEnd)
 }

@@ -100,7 +100,7 @@ func MatchesToTeamMap(matches MatchResponse) MatchMap {
 	matchMap := make(MatchMap)
 	
 	for _, match := range matches.Results {
-		title := match.Away.Name + " vs " + match.Home.Name
+		title := formatTeamName(match.Away.Name) + " vs " + formatTeamName(match.Home.Name)
 		home := Team{
 			Name: match.Home.Name,
 			Img: KQBAvatarImage,

@@ -5,6 +5,7 @@ go 1.15
 require (
 	fyne.io/fyne v1.4.3
 	fyne.io/fyne/v2 v2.0.2
+	github.com/aquilax/truncate v1.0.0 // indirect
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/gobuffalo/packr/v2 v2.8.1
 	github.com/gorilla/websocket v1.4.2
