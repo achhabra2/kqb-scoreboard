@@ -7,10 +7,11 @@ import (
 	"strconv"
 
 	"fyne.io/fyne/v2"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
-	"fyne.io/fyne/v2/dialog"
 )
 
 func GameType(a fyne.App) *fyne.Window {
@@ -95,19 +96,24 @@ func CustomTeamSelection(w fyne.Window) *fyne.Container {
 }
 
 func BGLMatchSelection(w fyne.Window) *fyne.Container {
-	label := widget.NewLabel("Select Teams")
+	label := widget.NewLabel("Select Match Info")
 	label.Alignment = fyne.TextAlignCenter
 	label.TextStyle.Bold = true
 	blueLabel := widget.NewLabel("Blue Team")
 	goldLabel := widget.NewLabel("Gold Team")
 
-	ch := make(chan []Team)
-
+	blueTeamSelect := widget.NewSelect([]string{"Blue"}, func(val string) {})
+	goldTeamSelect := widget.NewSelect([]string{"Gold"}, func(val string) {})
+	blueTeamContainer := container.NewHBox(layout.NewSpacer(), blueLabel, blueTeamSelect, layout.NewSpacer())
+	goldTeamContainer := container.NewHBox(layout.NewSpacer(), goldLabel, goldTeamSelect, layout.NewSpacer())
+	blueTeamContainer.Hide()
+	goldTeamContainer.Hide()
+	// ch := make(chan []Team)
+	ch := make(chan MatchMap)
 	w.SetContent(ProgressIndicator())
-	go GetTeamInfo(ch)
-	teams := <-ch
+	go GetMatchInfo(ch)
+	matchMap := <-ch
 
-	options := make([]string, len(teams))
 	var blueTeam Team
 	var goldTeam Team
 
@@ -119,40 +125,47 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 		StartScoreboard(w)
 	})
 
-	// saveButton.Style = widget.PrimaryButton
 	saveButton.Importance = widget.HighImportance
 	saveButton.Disable()
 
-	for i, team := range teams {
-		options[i] = team.Name
+	matchOptions := make([]string, 0)
+	for k, _ := range matchMap {
+		matchOptions = append(matchOptions, k)
 	}
-	blueTeamSelect := widget.NewSelect(options, func(value string) {
-		for i, v := range options {
-			if v == value {
-				blueTeam = teams[i]
+	matchLabel := widget.NewLabel("Select Match")
+	matchLabel.Alignment = fyne.TextAlignCenter
+
+	matchSelect := widget.NewSelect(matchOptions, func(value string) {
+		selectedMatchTeams := matchMap[value]
+		teamOptions := []string{selectedMatchTeams[0].Name, selectedMatchTeams[1].Name}
+		blueTeamSelect.Options = teamOptions
+		blueTeamSelect.OnChanged = func(val string) {
+			idx := blueTeamSelect.SelectedIndex()
+			blueTeam = selectedMatchTeams[idx]
+			log.Println("Select blue team to", value)
+			if blueTeam.Name != "" && goldTeam.Name != "" {
+				saveButton.Enable()
 			}
 		}
-		log.Println("Select set to", value)
-		if blueTeam.Name != "" && goldTeam.Name != "" {
-			saveButton.Enable()
-		}
-	})
-	goldTeamSelect := widget.NewSelect(options, func(value string) {
-		for i, v := range options {
-			if v == value {
-				goldTeam = teams[i]
+		goldTeamSelect.Options = teamOptions
+		goldTeamSelect.OnChanged = func(val string) {
+			idx := goldTeamSelect.SelectedIndex()
+			goldTeam = selectedMatchTeams[idx]
+			log.Println("Select gold team to", value)
+			if blueTeam.Name != "" && goldTeam.Name != "" {
+				saveButton.Enable()
 			}
 		}
-		log.Println("Select set to", value)
-		if blueTeam.Name != "" && goldTeam.Name != "" {
-			saveButton.Enable()
-		}
+
+		blueTeamContainer.Refresh()
+		goldTeamContainer.Refresh()
+		blueTeamContainer.Show()
+		goldTeamContainer.Show()
 	})
 
-	blueTeamContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), blueLabel, blueTeamSelect, layout.NewSpacer())
-	goldTeamContainer := fyne.NewContainerWithLayout(layout.NewHBoxLayout(), layout.NewSpacer(), goldLabel, goldTeamSelect, layout.NewSpacer())
+	matchSelectContainer := container.NewHBox(matchLabel, matchSelect)
 
-	container := fyne.NewContainerWithLayout(layout.NewVBoxLayout(), label, blueTeamContainer, goldTeamContainer, saveButton)
+	container := container.NewVBox(label, matchSelectContainer, blueTeamContainer, goldTeamContainer, saveButton)
 
 	return container
 }
@@ -274,7 +287,6 @@ func ShowAboutWindow() {
 	aboutWindow.SetContent(AboutPage())
 	aboutWindow.Show()
 }
-
 
 func CheckForUpdates(w fyne.Window) {
 	shouldUpdate, latestVersion := checkForUpdate()

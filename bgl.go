@@ -11,55 +11,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 )
 
-type TeamsResult struct {
-	Count    int         `json:"count"`
-	Next     interface{} `json:"next"`
-	Previous interface{} `json:"previous"`
-	Teams    []struct {
-		ID            int         `json:"id"`
-		Name          string      `json:"name"`
-		Circuit       int         `json:"circuit"`
-		Group         interface{} `json:"group"`
-		IsActive      bool        `json:"is_active"`
-		CanAddMembers bool        `json:"can_add_members"`
-		Dynasty       interface{} `json:"dynasty"`
-		Captain       struct {
-			ID              int         `json:"id"`
-			Name            string      `json:"name"`
-			NamePhonetic    interface{} `json:"name_phonetic"`
-			Pronouns        string      `json:"pronouns"`
-			DiscordUsername interface{} `json:"discord_username"`
-			TwitchUsername  string      `json:"twitch_username"`
-			Bio             string      `json:"bio"`
-			Emoji           interface{} `json:"emoji"`
-			AvatarURL       string      `json:"avatar_url"`
-			Modified        time.Time   `json:"modified"`
-			Created         time.Time   `json:"created"`
-		} `json:"captain"`
-		Members []struct {
-			ID              int         `json:"id"`
-			Name            string      `json:"name"`
-			NamePhonetic    string      `json:"name_phonetic"`
-			Pronouns        string      `json:"pronouns"`
-			DiscordUsername string      `json:"discord_username"`
-			TwitchUsername  string      `json:"twitch_username"`
-			Bio             string      `json:"bio"`
-			Emoji           interface{} `json:"emoji"`
-			AvatarURL       string      `json:"avatar_url"`
-			Modified        time.Time   `json:"modified"`
-			Created         time.Time   `json:"created"`
-		} `json:"members"`
-		Modified time.Time `json:"modified"`
-		Created  time.Time `json:"created"`
-		Wins     int       `json:"wins"`
-		Losses   int       `json:"losses"`
-	} `json:"results"`
-}
-
-func GetBGLTeams() TeamsResult {
+func GetBGLTeams() TeamsResponse {
 
 	url := "https://api.beegame.gg/teams/?is_active=true"
 	method := "GET"
@@ -82,7 +36,7 @@ func GetBGLTeams() TeamsResult {
 		log.Println(err)
 	}
 
-	var teamsResult TeamsResult
+	var teamsResult TeamsResponse
 	err = json.Unmarshal(body, &teamsResult)
 	if err != nil {
 		log.Println(err)
@@ -110,3 +64,73 @@ func GetTeamInfo(c chan []Team) {
 
 	c <- teams
 }
+
+func GetBGLMatches() MatchResponse {
+	url := "https://api.beegame.gg/matches/?days=7&scheduled=true&limit=100"
+	method := "GET"
+
+	client := &http.Client{}
+	req, err := http.NewRequest(method, url, nil)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	res, err := client.Do(req)
+	if err != nil {
+		log.Println(err)
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		log.Println(err)
+	}
+
+	var matchResponse MatchResponse
+	err = json.Unmarshal(body, &matchResponse)
+	if err != nil {
+		log.Println(err)
+	}
+
+	return matchResponse
+}
+
+func MatchesToTeamMap(matches MatchResponse) MatchMap {
+	matchMap := make(MatchMap)
+	
+	for _, match := range matches.Results {
+		title := match.Away.Name + " vs " + match.Home.Name
+		home := Team{
+			Name: match.Home.Name,
+			Img: KQBAvatarImage,
+			Stats: Stats{
+				MatchesWon:match.Home.Wins,
+				MatchesLost: match.Home.Losses,
+			},
+		}
+
+		away := Team{
+			Name: match.Away.Name,
+			Img: KQBAvatarImage,
+			Stats: Stats{
+				MatchesWon:match.Away.Wins,
+				MatchesLost: match.Away.Losses,
+			},
+		}
+
+		matchMap[title] = []Team{away, home}
+	}
+
+	return matchMap
+}
+
+func GetMatchInfo(c chan MatchMap) {
+	log.Println("Fetching Match Information from BGL...")
+	matches := GetBGLMatches()
+	matchMap := MatchesToTeamMap(matches)
+
+	c <- matchMap
+}
+
+type MatchMap map[string][]Team
