@@ -23,19 +23,20 @@ func GameType(a fyne.App) *fyne.Window {
 	IGLButton := widget.NewButton("BGL Match", func() {
 		log.Println("Selected BGL KQB Scoreboard")
 		content := BGLMatchSelection(win)
-		win.Resize(fyne.NewSize(400, 500))
+		win.Resize(fyne.NewSize(660, 500))
 		win.SetContent(content)
 	})
 	CustomButton := widget.NewButton("Custom Match", func() {
 		log.Println("Selected Custom Match Type")
 		content := CustomTeamSelection(win)
-		win.Resize(fyne.NewSize(400, 500))
+		win.Resize(fyne.NewSize(660, 500))
 		win.SetContent(content)
 	})
 	cont := container.NewVBox(label, IGLButton, CustomButton)
 
 	win.SetContent(cont)
-	win.Resize(fyne.NewSize(400, 500))
+	win.Resize(fyne.NewSize(660, 500))
+	win.CenterOnScreen()
 	win.Show()
 	go CheckForUpdates(win)
 	return &win
@@ -106,6 +107,7 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 	goldTeamSelect := widget.NewSelect([]string{"Gold"}, func(val string) {})
 	blueTeamContainer := container.NewHBox(layout.NewSpacer(), blueLabel, blueTeamSelect, layout.NewSpacer())
 	goldTeamContainer := container.NewHBox(layout.NewSpacer(), goldLabel, goldTeamSelect, layout.NewSpacer())
+	// blueTeamSelect.Resize(fyne.NewSize(500, 100))
 	blueTeamContainer.Hide()
 	goldTeamContainer.Hide()
 	// ch := make(chan []Team)
@@ -236,24 +238,25 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 		UpdateScoreBoard(&s)
 	})
 	resetButtonContainer := container.NewHBox(layout.NewSpacer(), resetButton, layout.NewSpacer())
-	starTimerButton := widget.NewButton("Start Timer", func() {
-		UpdateTimer("StartTimer")
-	})
-	stopTimerButton := widget.NewButton("Stop Timer", func() {
-		UpdateTimer("StopTimer")
-	})
-	resetTimerButton := widget.NewButton("Reset Timer", func() {
-		UpdateTimer("ResetTimer")
-	})
-	hideTimerButton := widget.NewButton("Show/Hide Timer", func() {
-		UpdateTimer("ToggleTimer")
-	})
+	// starTimerButton := widget.NewButton("Start Timer", func() {
+	// 	UpdateTimer("StartTimer")
+	// })
+	// stopTimerButton := widget.NewButton("Stop Timer", func() {
+	// 	UpdateTimer("StopTimer")
+	// })
+	// resetTimerButton := widget.NewButton("Reset Timer", func() {
+	// 	UpdateTimer("ResetTimer")
+	// })
+	// hideTimerButton := widget.NewButton("Show/Hide Timer", func() {
+	// 	UpdateTimer("ToggleTimer")
+	// })
 	aboutButton := widget.NewButton("About", func() {
 		ShowAboutWindow()
 	})
 	aboutContainer := container.NewHBox(layout.NewSpacer(), aboutButton, layout.NewSpacer())
-	timerContainer := container.NewHBox(layout.NewSpacer(), starTimerButton, stopTimerButton, resetTimerButton, hideTimerButton, layout.NewSpacer())
-	container := container.NewVBox(scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, timerContainer, aboutContainer)
+	// timerContainer := container.NewHBox(layout.NewSpacer(), starTimerButton, stopTimerButton, resetTimerButton, hideTimerButton, layout.NewSpacer())
+	// container := container.NewVBox(scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, timerContainer, aboutContainer)
+	container := container.NewVBox(scoreboardLabel, blueContainer, goldContainer, scoreboardContainer, resetButtonContainer, link, aboutContainer)
 	return container
 }
 
@@ -277,7 +280,7 @@ func AboutPage() *fyne.Container {
 	label.Alignment = fyne.TextAlignCenter
 	label.TextStyle.Bold = true
 
-	author := widget.NewLabel("Author: Aman AKA Prosive")
+	author := widget.NewLabel("Author: Prosive")
 	author.Alignment = fyne.TextAlignLeading
 	githubURL, _ := url.Parse("https://github.com/achhabra2/kqb-scoreboard")
 	githubWidget := widget.NewHyperlink("Github Repo", githubURL)
@@ -290,6 +293,7 @@ func AboutPage() *fyne.Container {
 func ShowAboutWindow() {
 	aboutWindow := FyneApp.NewWindow("About")
 	aboutWindow.SetContent(AboutPage())
+	aboutWindow.CenterOnScreen()
 	aboutWindow.Show()
 }
 

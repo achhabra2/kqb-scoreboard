@@ -17,5 +17,9 @@ KQB Scoreboard was written in Go and provides a browser widget interface for use
 ## Screen Shots and Demo
 See the [Demo Video](https://www.youtube.com/watch?v=ZEOmpLE7CRs) for an idea of how it works. 
 
+New Screenshot!
+![Screen Shot 3](/screenshots/scoreboard-ss-3.png)
+
+Old Screenshots
 ![Screen Shot 1](/screenshots/scoreboard-ss-1.png)
 ![Screen Shot 2](/screenshots/scoreboard-ss-2.png)
