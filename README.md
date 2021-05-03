@@ -8,7 +8,7 @@ KQB Scoreboard was written in Go and provides a browser widget interface for use
 1. Download the new GUI release from [Github Releases Page](https://github.com/achhabra2/kqb-scoreboard/releases)
 2. Unzip the file and run the App
 3. Follow the on screen instructions for IGL or Custom Match Type
-4. Create a browser source in OBS pointed at http://localhost:8080
+4. Create a browser source in OBS pointed at http://localhost:8080/static/
 * Recommended dimensions are 1760x90 to get the look in the screen shot below
 * Then add a green chroma filter to make it transparent
 5. Profit
