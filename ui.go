@@ -128,8 +128,8 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 	saveButton := widget.NewButton("Start Scoreboard", func() {
 		log.Println("Saved.")
 		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0, []ScoreboardSet{}}
-		UpdateTeamLogo(&blueTeam)
-		UpdateTeamLogo(&goldTeam)
+		// UpdateTeamLogo(&blueTeam)
+		// UpdateTeamLogo(&goldTeam)
 		StartScoreboard(w)
 		UpdateStaticRoute()
 	})

@@ -119,10 +119,26 @@ body {
 
 .blue-score-text {
   color: var(--blue-team-background);
+  /* -webkit-text-stroke: 1px black;
+  paint-order: stroke fill; */
+  text-shadow:
+  3px 3px 0 #000,
+-1px -1px 0 #000,  
+ 1px -1px 0 #000,
+ -1px 1px 0 #000,
+  1px 1px 0 #000;
 }
 
 .gold-score-text {
   color: var(--gold-team-background);
+  /* -webkit-text-stroke: 1px black;
+  paint-order: stroke fill; */
+  text-shadow:
+  3px 3px 0 #000,
+-1px -1px 0 #000,  
+ 1px -1px 0 #000,
+ -1px 1px 0 #000,
+  1px 1px 0 #000;
 }
 
 .blue-box {
@@ -151,7 +167,7 @@ body {
 }
 
 .home-oval-filled {
-  width: 1.5rem;
+  width: 1.7rem;
   height: 4rem;
   background: #0047ff;
   border-radius: 50px / 25px;
@@ -161,7 +177,7 @@ body {
   }
 
 .oval-empty {
-  width: 1.5rem;
+  width: 1.7rem;
   height: 4rem;
   background: #252827;
   border-radius: 50px / 25px;
@@ -171,7 +187,7 @@ body {
   }
 
 .away-oval-empty {
-  width: 1.5rem;
+  width: 1.7rem;
   height: 4rem;
   background: #252827;
   border-radius: 50px / 25px;
@@ -183,7 +199,7 @@ body {
 
 .away-oval-filled {
   background: #fdb833;
-  width: 1.5rem;
+  width: 1.7rem;
   height: 4rem;
   border-radius: 50px / 25px;
   border: 4px #b37b2d solid;
