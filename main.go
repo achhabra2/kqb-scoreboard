@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -12,7 +13,7 @@ import (
 
 const (
 	PlaceholderImage = "https://bulma.io/images/placeholders/128x128.png"
-	KQBAvatarImage   = "/avatar.png"
+	KQBAvatarImage   = "avatar.png"
 )
 
 type Team struct {
@@ -34,6 +35,9 @@ var h Team = Team{"Blue Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var a Team = Team{"Gold Team", PlaceholderImage, 1, 1, Stats{1, 1, 1, 1}}
 var s Scoreboard = Scoreboard{&h, &a, 0, 0, 0, 0, []ScoreboardSet{}}
 var logoPath string
+var themePath string
+var themes []string
+var selectedTheme string
 var FyneApp fyne.App
 
 func setupLogs() {
@@ -86,10 +90,31 @@ func SetupLogoDirectory() {
 	logoPath = filepath.Join(path, "logo")
 	fmt.Println(logoPath)
 
+	// Set Theme Path
+	themePath = filepath.Join(path, "themes")
+
 	// Create directory if it doesn't exist
 	if _, err := os.Stat(logoPath); os.IsNotExist(err) {
 		os.Mkdir(logoPath, 0755)
 	}
+
+	// Create directory if it doesn't exist
+	if _, err := os.Stat(themePath); os.IsNotExist(err) {
+		themePath = ""
+	}
+
+	files, err := ioutil.ReadDir(themePath)
+	if err != nil {
+		log.Println(err)
+	}
+
+	themes = append(themes, "default")
+
+	for _, file := range files {
+		name := file.Name()
+		themes = append(themes, name)
+	}
+
 }
 
 func tidyUp() {

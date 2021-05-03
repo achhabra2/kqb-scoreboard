@@ -8,6 +8,7 @@ require (
 	github.com/aquilax/truncate v1.0.0 // indirect
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/gobuffalo/packr/v2 v2.8.1
+	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/websocket v1.4.2
 	github.com/karrick/godirwalk v1.16.1 // indirect
 	github.com/rhysd/go-github-selfupdate v1.2.3

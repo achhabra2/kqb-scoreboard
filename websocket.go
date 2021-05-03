@@ -4,13 +4,16 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 
 	"github.com/gobuffalo/packr/v2"
+	"github.com/gorilla/mux"
 	"github.com/gorilla/websocket"
 )
 
 var upgrader = websocket.Upgrader{} // use default options
 var clients = make(map[*websocket.Conn]bool)
+var router *mux.Router
 
 func echo(w http.ResponseWriter, r *http.Request) {
 	c, err := upgrader.Upgrade(w, r, nil)
@@ -78,13 +81,24 @@ func UpdateTimer(function string) {
 }
 
 func StartHTTPServer() {
-	http.HandleFunc("/ws", ws)
-	http.HandleFunc("/echo", echo)
-	box := packr.New("static", "./static")
-	http.Handle("/", http.FileServer(box))
-	http.Handle("/logo", http.FileServer(http.Dir(logoPath)))
+	r := mux.NewRouter()
+	r.HandleFunc("/ws", ws)
+	r.HandleFunc("/echo", echo)
+	r.Handle("/logo", http.FileServer(http.Dir(logoPath)))
+	// box := packr.New("static", "./static")
+	// r.Handle("/", http.FileServer(box))
+	router = r
 	go func() {
-		log.Fatal(http.ListenAndServe(":8080", nil))
+		log.Fatal(http.ListenAndServe(":8080", r))
 	}()
 	fmt.Println("Starting HTTP Server @ http://localhost:8080")
+}
+
+func UpdateStaticRoute() {
+	box := packr.New("static", "./static")
+	if selectedTheme != "default" {
+		router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir(filepath.Join(themePath, selectedTheme)))))
+	} else {
+		router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(box)))
+	}
 }

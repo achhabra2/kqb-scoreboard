@@ -107,6 +107,12 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 	goldTeamSelect := widget.NewSelect([]string{"Gold"}, func(val string) {})
 	blueTeamContainer := container.NewHBox(layout.NewSpacer(), blueLabel, blueTeamSelect, layout.NewSpacer())
 	goldTeamContainer := container.NewHBox(layout.NewSpacer(), goldLabel, goldTeamSelect, layout.NewSpacer())
+
+	themeSelectLabel := widget.NewLabel("Select Theme")
+	themeSelect := widget.NewSelect(themes, func(theme string) {
+		selectedTheme = theme
+	})
+	themeSelectContainer := container.NewHBox(layout.NewSpacer(), themeSelectLabel, themeSelect, layout.NewSpacer())
 	// blueTeamSelect.Resize(fyne.NewSize(500, 100))
 	blueTeamContainer.Hide()
 	goldTeamContainer.Hide()
@@ -125,6 +131,7 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 		UpdateTeamLogo(&blueTeam)
 		UpdateTeamLogo(&goldTeam)
 		StartScoreboard(w)
+		UpdateStaticRoute()
 	})
 
 	saveButton.Importance = widget.HighImportance
@@ -171,7 +178,7 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 
 	matchSelectContainer := container.NewHBox(layout.NewSpacer(), matchLabel, matchSelect, layout.NewSpacer())
 
-	container := container.NewVBox(label, matchSelectContainer, blueTeamContainer, goldTeamContainer, saveButton)
+	container := container.NewVBox(label, matchSelectContainer, blueTeamContainer, goldTeamContainer, themeSelectContainer, saveButton)
 
 	return container
 }
@@ -224,7 +231,7 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 
 	blueContainer := container.NewHBox(layout.NewSpacer(), incrementBlue, incrementGold, layout.NewSpacer())
 	goldContainer := container.NewHBox(layout.NewSpacer(), decrementBlue, decrementGold, layout.NewSpacer())
-	scoreboardURL, _ := url.Parse("http://localhost:8080")
+	scoreboardURL, _ := url.Parse("http://localhost:8080/static/")
 	link := widget.NewHyperlink("Scoreboard", scoreboardURL)
 	link.Alignment = fyne.TextAlignCenter
 
