@@ -23,9 +23,6 @@ New Theme!
 New Screenshot!
 ![Screen Shot 3](/screenshots/scoreboard-ss-3.png)
 
-Old Screenshots
-![Screen Shot 1](/screenshots/scoreboard-ss-1.png)
-![Screen Shot 2](/screenshots/scoreboard-ss-2.png)
 
 Theme Support 05/03/21
 ![Theme Support](/screenshots/theme-support.png)
