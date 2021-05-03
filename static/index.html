@@ -65,20 +65,7 @@
                 document.getElementById("away-img").src = data.Away.Img
             }
             updateMapCSS(data)
-            // if (data.HomeGames >= 3) {
-            //     document.getElementById("home-winner").classList.add("winner-background")
-            // } else {
-            //     if(document.getElementById("home-winner").classList.contains("winner-background")) {
-            //         document.getElementById("home-winner").classList.remove("winner-background")
-            //     }
-            // }
-            // if (data.AwayGames >= 3) {
-            //     document.getElementById("away-winner").classList.add("winner-background")
-            // } else {
-            //     if(document.getElementById("away-winner").classList.contains("winner-background")) {
-            //         document.getElementById("away-winner").classList.remove("winner-background")
-            //     }
-            // }
+
             let homeRow = document.getElementById("home-row")
             let awayRow = document.getElementById("away-row")
             homeRow.cells[0].innerText = acronym(data.Home.Name)
@@ -105,27 +92,6 @@
                 homeCell.innerText = set.Home
                 awayCell.innerText = set.Away
             }
-        }
-        function DarkModeToggle() {
-            document.getElementById("home-winner").classList.toggle("dark-background");
-            document.getElementById("away-winner").classList.toggle("dark-background");
-            document.getElementById("chroma-box").classList.remove("hidden");
-            document.getElementById("home-total").classList.toggle("has-text-light");
-            document.getElementById("away-total").classList.toggle("has-text-light");
-            document.getElementById("home-stats").classList.toggle("has-text-light");
-            document.getElementById("away-stats").classList.toggle("has-text-light");
-        }
-
-        function TransparentToggle() {
-            document.getElementById("home-winner").classList.toggle("is-transparent");
-            document.getElementById("away-winner").classList.toggle("is-transparent");
-            document.getElementById("chroma-box").className = "chroma-box";
-        }
-
-        function WhiteToggle() {
-            document.getElementById("home-winner").className = "left home-box";
-            document.getElementById("away-winner").className = "right away-box";
-            // document.getElementById("chroma-box").className = "hidden";
         }
 
         function connect() {
@@ -265,7 +231,7 @@
                 <div class="content">
                     <strong id="home-name" class="blue-text team-name">Blue Team</strong>
                     <br>
-                    <span id="home-stats" class="is-size-6">(0-0)</span>
+                    <span id="home-stats" class="is-size-6 has-text-light">(0-0)</span>
                 </div>
             </div>
             <div class="three">
@@ -311,7 +277,7 @@
                     <p>
                         <strong id="away-name" class="gold-text team-name">Gold Team</strong>
                         <br>
-                        <span id="away-stats" class="is-size-6">(0-0)</span>
+                        <span id="away-stats" class="is-size-6 has-text-light">(0-0)</span>
                     </p>
                 </div>
             </div>
@@ -323,9 +289,6 @@
             </div>
         </article>
     </div>
-    <button id="dark-mode" class="button bottom">Dark Background</button>
-    <button id="transparent-mode" class="button bottom">Transparent Background</button>
-    <button id="white-mode" class="button bottom">White Background</button>
 </body>
 
 </html>

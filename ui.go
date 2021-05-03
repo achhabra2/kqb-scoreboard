@@ -112,6 +112,7 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 	themeSelect := widget.NewSelect(themes, func(theme string) {
 		selectedTheme = theme
 	})
+	themeSelect.SetSelected("default")
 	themeSelectContainer := container.NewHBox(layout.NewSpacer(), themeSelectLabel, themeSelect, layout.NewSpacer())
 	// blueTeamSelect.Resize(fyne.NewSize(500, 100))
 	blueTeamContainer.Hide()
@@ -170,8 +171,6 @@ func BGLMatchSelection(w fyne.Window) *fyne.Container {
 			}
 		}
 
-		blueTeamContainer.Refresh()
-		goldTeamContainer.Refresh()
 		blueTeamContainer.Show()
 		goldTeamContainer.Show()
 	})
