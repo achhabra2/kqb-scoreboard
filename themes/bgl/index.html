@@ -1,190 +1,248 @@
-<!DOCTYPE html>
-
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="scoreboard.css">
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
-    <meta charset="utf-8">
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" type="text/css" href="scoreboard.css" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <meta charset="utf-8" />
     <script src="fitty.min.js"></script>
     <script>
-        function acronym(text) {
-            return text
-                .split(/\s/)
-                .reduce((accumulator, word) => accumulator + word.charAt(0), '')
-                .substring(0,3);
-        }
-        function updateMapCSS(data) {
-            var homeMaps = [1, 2, 3].map(x => `home-map-${x}`)
-            var awayMaps = [1, 2, 3].map(x => `away-map-${x}`)
-            if (data.HomeMaps > 0) {
-                homeMaps.forEach(id => document.getElementById(id).className = "oval-empty")
-                for (var i = 0; i < data.HomeMaps; i++) {
-                    var elem = document.getElementById(homeMaps[i])
-                    elem.setAttribute("class", "home-oval-filled")
-                }
-            }
-            else {
-                homeMaps.forEach(id => document.getElementById(id).className = "oval-empty")
-            }
-            if (data.AwayMaps > 0) {
-                awayMaps.forEach(id => document.getElementById(id).className = "away-oval-empty")
-                for (var j = 0; j < data.AwayMaps; j++) {
-                    var elem = document.getElementById(awayMaps[j])
-                    elem.setAttribute("class", "away-oval-filled")
-                }
-            }
-            else {
-                awayMaps.forEach(id => document.getElementById(id).className = "away-oval-empty")
-            }
-        }
-        function updateScoreData(json) {
-            var data = JSON.parse(json)
-            console.log(data)
-            var opts = {
-                minSize: 14,
-                maxSize: 38,
-                multiLine: true
-            }
+      const animateCSS = (element, animation, prefix = "animate__") =>
+        // We create a Promise and return it
+        new Promise((resolve, reject) => {
+          const animationName = `${prefix}${animation}`;
+          const node = document.querySelector(element);
 
-            if (document.getElementById("home-name").innerText != data.Home.Name) {
-                document.getElementById("home-name").innerText = data.Home.Name
-                fitty('#home-name', opts);
-            }
-            if (document.getElementById("away-name").innerText != data.Away.Name) {
-                document.getElementById("away-name").innerText = data.Away.Name
-                fitty('#away-name', opts);
-            }
-            document.getElementById("home-stats").innerText = data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost
-            document.getElementById("away-stats").innerText = data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost
-            document.getElementById("home-total").innerText = data.HomeGames
-            document.getElementById("away-total").innerText = data.AwayGames
-            // if (document.getElementById("home-img").src != data.Home.Img) {
-            //     document.getElementById("home-img").src = data.Home.Img
-            // }
-            // if (document.getElementById("away-img").src != data.Away.Img) {
-            //     document.getElementById("away-img").src = data.Away.Img
-            // }
-            updateMapCSS(data)
+          node.classList.add(`${prefix}animated`, animationName);
 
-            let homeRow = document.getElementById("home-row")
-            let awayRow = document.getElementById("away-row")
-            homeRow.cells[0].innerText = acronym(data.Home.Name)
-            awayRow.cells[0].innerText = acronym(data.Away.Name)
-            let x = homeRow.cells.length
-            let y = awayRow.cells.length
-            for (let i = x - 1; i > 0; i--) {
-                homeRow.deleteCell(i)
-            }
-            for (let j = y - 1; j > 0; j--) {
-                awayRow.deleteCell(j)
-            }
-            for (let [idx, set] of data.Sets.entries()) {
-                let homeCell = homeRow.insertCell(-1)
-                let awayCell = awayRow.insertCell(-1)
-                homeCell.classList.toggle("map-score")
-                awayCell.classList.toggle("map-score")
+          // When the animation ends, we clean the classes and resolve the Promise
+          function handleAnimationEnd(event) {
+            event.stopPropagation();
+            node.classList.remove(`${prefix}animated`, animationName);
+            resolve("Animation ended");
+          }
 
-                homeCell.innerText = set.Home
-                awayCell.innerText = set.Away
-            }
-        }
-
-        function connect() {
-            var ws = new WebSocket('ws://localhost:8080/ws');
-            window.ws = ws;
-
-            ws.onopen = function (evt) {
-                ws.send("Client Connected");
-            }
-
-            ws.onmessage = function (evt) {
-                console.log(evt.data)
-                switch (evt.data) {
-                    case "StartTimer":
-                        break;
-                    case "StopTimer":
-                        break;
-                    case "ResetTimer":
-                        break;
-                    case "ToggleTimer":
-                        break;
-                    default:
-                        updateScoreData(evt.data)
-                        break;
-                }
-            }
-
-            ws.onclose = function (e) {
-                console.log('Socket is closed. Reconnect will be attempted in 1 second.', e.reason);
-                setTimeout(function () {
-                    connect();
-                }, 1000);
-            };
-
-            ws.onerror = function (err) {
-                console.error('Socket encountered error: ', err.message, 'Closing socket');
-                ws.close();
-            };
-        }
-        window.addEventListener("load", function (evt) {
-
-            connect();
-
+          node.addEventListener("animationend", handleAnimationEnd, {
+            once: true,
+          });
         });
 
-    </script>
-</head>
+      function acronym(text) {
+        return text
+          .split(/\s/)
+          .reduce((accumulator, word) => accumulator + word.charAt(0), "")
+          .substring(0, 3);
+      }
+      function updateMapCSS(data) {
+        var homeMaps = [1, 2, 3].map((x) => `home-map-${x}`);
+        var awayMaps = [1, 2, 3].map((x) => `away-map-${x}`);
+        if (data.HomeMaps > 0) {
+          homeMaps.forEach(
+            (id) => (document.getElementById(id).className = "oval-empty")
+          );
+          for (var i = 0; i < data.HomeMaps; i++) {
+            var elem = document.getElementById(homeMaps[i]);
+            elem.setAttribute("class", "home-oval-filled");
+          }
+        } else {
+          homeMaps.forEach(
+            (id) => (document.getElementById(id).className = "oval-empty")
+          );
+        }
+        if (data.AwayMaps > 0) {
+          awayMaps.forEach(
+            (id) => (document.getElementById(id).className = "away-oval-empty")
+          );
+          for (var j = 0; j < data.AwayMaps; j++) {
+            var elem = document.getElementById(awayMaps[j]);
+            elem.setAttribute("class", "away-oval-filled");
+          }
+        } else {
+          awayMaps.forEach(
+            (id) => (document.getElementById(id).className = "away-oval-empty")
+          );
+        }
+      }
+      function updateScoreData(json) {
+        var data = JSON.parse(json);
+        console.log(data);
+        var opts = {
+          minSize: 14,
+          maxSize: 38,
+          multiLine: true,
+        };
 
-<body>
+        if (document.getElementById("home-name").innerText != data.Home.Name) {
+          document.getElementById("home-name").innerText = data.Home.Name;
+          fitty("#home-name", opts);
+        }
+        if (document.getElementById("away-name").innerText != data.Away.Name) {
+          document.getElementById("away-name").innerText = data.Away.Name;
+          fitty("#away-name", opts);
+        }
+        document.getElementById("home-stats").innerText =
+          data.Home.Stats.MatchesWon + "-" + data.Home.Stats.MatchesLost;
+        document.getElementById("away-stats").innerText =
+          data.Away.Stats.MatchesWon + "-" + data.Away.Stats.MatchesLost;
+
+        if (document.getElementById("home-total").innerText != data.HomeGames) {
+            document.getElementById("home-total").innerText = data.HomeGames;
+            animateCSS("#home-total-container", "bounceIn")
+        }
+        if (document.getElementById("away-total").innerText != data.AwayGames) {
+            document.getElementById("away-total").innerText = data.AwayGames;
+            animateCSS("#away-total-container", "bounceIn")
+        }
+        // if (document.getElementById("home-img").src != data.Home.Img) {
+        //     document.getElementById("home-img").src = data.Home.Img
+        // }
+        // if (document.getElementById("away-img").src != data.Away.Img) {
+        //     document.getElementById("away-img").src = data.Away.Img
+        // }
+        updateMapCSS(data);
+
+        let homeRow = document.getElementById("home-row");
+        let awayRow = document.getElementById("away-row");
+        homeRow.cells[0].innerText = acronym(data.Home.Name);
+        awayRow.cells[0].innerText = acronym(data.Away.Name);
+        let x = homeRow.cells.length;
+        let y = awayRow.cells.length;
+        for (let i = x - 1; i > 0; i--) {
+          homeRow.deleteCell(i);
+        }
+        for (let j = y - 1; j > 0; j--) {
+          awayRow.deleteCell(j);
+        }
+        for (let [idx, set] of data.Sets.entries()) {
+          let homeCell = homeRow.insertCell(-1);
+          let awayCell = awayRow.insertCell(-1);
+          homeCell.classList.toggle("map-score");
+          awayCell.classList.toggle("map-score");
+
+          homeCell.innerText = set.Home;
+          awayCell.innerText = set.Away;
+        }
+      }
+
+      function connect() {
+        var ws = new WebSocket("ws://localhost:8080/ws");
+        window.ws = ws;
+
+        ws.onopen = function (evt) {
+          ws.send("Client Connected");
+        };
+
+        ws.onmessage = function (evt) {
+          console.log(evt.data);
+          switch (evt.data) {
+            case "StartTimer":
+              break;
+            case "StopTimer":
+              break;
+            case "ResetTimer":
+              break;
+            case "ToggleTimer":
+              break;
+            default:
+              updateScoreData(evt.data);
+              break;
+          }
+        };
+
+        ws.onclose = function (e) {
+          console.log(
+            "Socket is closed. Reconnect will be attempted in 1 second.",
+            e.reason
+          );
+          setTimeout(function () {
+            connect();
+          }, 1000);
+        };
+
+        ws.onerror = function (err) {
+          console.error(
+            "Socket encountered error: ",
+            err.message,
+            "Closing socket"
+          );
+          ws.close();
+        };
+      }
+      window.addEventListener("load", function (evt) {
+        connect();
+      });
+    </script>
+  </head>
+
+  <body>
     <div class="flex flex-row gap-4 justify-center justify-items-center">
-        <div id="home-winner" class="blue-box text-center w-1/5 mx-2 shadow-lg">
-            <div class="content">
-                <strong id="home-name" class="blue-text team-name">Blue Team</strong>
-                <br>
-                <span id="home-stats" class="is-size-6 standings-text">(0-0)</span>
-            </div>
+      <div id="home-winner" class="blue-box text-center w-1/5 mx-2 shadow-lg">
+        <div class="content">
+          <strong id="home-name" class="blue-text team-name">Blue Team</strong>
+          <br />
+          <span id="home-stats" class="text-xl standings-text">(0-0)</span>
         </div>
-        <div class="my-4 mx-2">
-            <div id="home-map-1" class="oval-empty"></div>
-            <div id="home-map-2" class="oval-empty"></div>
-            <div id="home-map-3" class="oval-empty"></div>
+      </div>
+      <div class="my-4 mx-2">
+        <div id="home-map-1" class="oval-empty"></div>
+        <div id="home-map-2" class="oval-empty"></div>
+        <div id="home-map-3" class="oval-empty"></div>
+      </div>
+      <div id="home-total-container" class="my-2 mx-2">
+        <span
+          id="home-total"
+          class="score-text blue-score-text font-extrabold subpixel-antialiased"
+        >
+          0
+        </span>
+      </div>
+      <div id="set-box" class="set-box mx-2">
+        <table id="set-table">
+          <tr
+            id="home-row"
+            class="blue-text set-text blue-set-box text-3xl"
+          >
+            <td class="px-2">A</td>
+          </tr>
+          <tr
+            id="away-row"
+            class="gold-text set-text gold-set-box divide-y-4 divide-black text-3xl"
+          >
+            <td class="px-2">H</td>
+          </tr>
+        </table>
+      </div>
+      <div id="away-total-container" class="my-2 mx-2">
+        <span
+          id="away-total"
+          class="score-text gold-score-text font-extrabold subpixel-antialiased"
+        >
+          0
+        </span>
+      </div>
+      <div class="my-4 mx-2">
+        <div id="away-map-3" class="away-oval-empty"></div>
+        <div id="away-map-2" class="away-oval-empty"></div>
+        <div id="away-map-1" class="away-oval-empty"></div>
+      </div>
+      <div id="away-winner" class="gold-box text-center w-1/5 mx-2 shadow-lg">
+        <div class="content">
+          <p>
+            <strong id="away-name" class="gold-text team-name"
+              >Gold Team</strong
+            >
+            <br />
+            <span id="away-stats" class="text-xl standings-text">(0-0)</span>
+          </p>
         </div>
-        <div class="my-2 mx-1">
-            <span id="home-total" class="score-text blue-score-text font-extrabold subpixel-antialiased">
-                0
-            </span>
-        </div>
-        <div id="set-box" class="set-box mx-2 shadow-lg">
-            <table id="set-table">
-                <tr id="home-row" class="blue-text set-text blue-set-box bg-clip-padding">
-                    <td>A</td>
-                </tr>
-                <tr id="away-row" class="gold-text set-text gold-set-box divide-y-4 divide-black bg-clip-padding">
-                    <td>H</td>
-                </tr>
-            </table>
-        </div>
-        <div class="my-2 mx-1">
-            <span id="away-total" class="score-text gold-score-text font-extrabold subpixel-antialiased">
-                0
-            </span>
-        </div>
-        <div class="my-4 mx-2">
-            <div id="away-map-3" class="away-oval-empty"></div>
-            <div id="away-map-2" class="away-oval-empty"></div>
-            <div id="away-map-1" class="away-oval-empty"></div>
-        </div>
-        <div id="away-winner" class="gold-box text-center w-1/5 mx-2 shadow-lg">
-            <div class="content">
-                <p>
-                    <strong id="away-name" class="gold-text team-name">Gold Team</strong>
-                    <br>
-                    <span id="away-stats" class="is-size-6 standings-text">(0-0)</span>
-                </p>
-            </div>
-        </div>
+      </div>
     </div>
     <div id="chroma-box" class="chroma-box"></div>
-</body>
-
+  </body>
 </html>

@@ -95,10 +95,14 @@ func StartHTTPServer() {
 }
 
 func UpdateStaticRoute() {
-	box := packr.New("static", "./static")
-	if selectedTheme != "default" {
+	defaultTheme := packr.New("static", "./static")
+	bglTheme := packr.New("bgl", "./themes/bgl")
+	switch selectedTheme {
+	case "default":
+		router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(defaultTheme)))
+	case "bgl":
+		router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(bglTheme)))
+	default:
 		router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(http.Dir(filepath.Join(themePath, selectedTheme)))))
-	} else {
-		router.PathPrefix("/static").Handler(http.StripPrefix("/static", http.FileServer(box)))
 	}
 }

@@ -196,9 +196,9 @@ func ScoreboardContent(w fyne.Window, SetupEventHooks func(func())) *fyne.Contai
 	goldMaps := widget.NewLabel("0")
 	blueSets := widget.NewLabel("0")
 	goldSets := widget.NewLabel("0")
-	blueScoreboard := fyne.NewContainerWithLayout(layout.NewFormLayout(), mapsLabel, blueMaps, setsLabel, blueSets)
-	goldScoreboard := fyne.NewContainerWithLayout(layout.NewFormLayout(), mapsLabel, goldMaps, setsLabel, goldSets)
-	scoreboardContainer := fyne.NewContainerWithLayout(layout.NewGridLayout(2), blueLabel, goldLabel, blueScoreboard, goldScoreboard)
+	blueScoreboard := container.New(layout.NewFormLayout(), mapsLabel, blueMaps, setsLabel, blueSets)
+	goldScoreboard := container.New(layout.NewFormLayout(), mapsLabel, goldMaps, setsLabel, goldSets)
+	scoreboardContainer := container.New(layout.NewGridLayout(2), blueLabel, goldLabel, blueScoreboard, goldScoreboard)
 	RefreshScoreboardUI := func() {
 		blueMaps.Text = strconv.Itoa(s.HomeMaps)
 		blueSets.Text = strconv.Itoa(s.HomeGames)

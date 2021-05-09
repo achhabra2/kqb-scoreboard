@@ -162,7 +162,7 @@ body {
 .score-text {
   font-family: var(--score-font);
   line-height: 70px;
-  font-size: 3.5em;
+  font-size: 4.0em;
   text-align: center;
 }
 
@@ -301,7 +301,7 @@ table {
 
 .map-score {
   text-align: center !important;
-  margin: auto;
+  /* margin: auto; */
 }
 
 .row-border {
@@ -328,5 +328,4 @@ table {
 
 table, td {
   vertical-align: middle !important;
-  padding: 2px !important;
 }

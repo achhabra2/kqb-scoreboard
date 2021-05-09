@@ -108,7 +108,7 @@ func SetupLogoDirectory() {
 		log.Println(err)
 	}
 
-	themes = append(themes, "default")
+	themes = append(themes, "default", "bgl")
 
 	for _, file := range files {
 		name := file.Name()
