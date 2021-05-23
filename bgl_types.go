@@ -14,15 +14,15 @@ type MatchResponse struct {
 			Members []struct {
 				ID              int         `json:"id"`
 				Name            string      `json:"name"`
-				NamePhonetic    string      `json:"name_phonetic"`
-				Pronouns        string      `json:"pronouns"`
-				DiscordUsername string      `json:"discord_username"`
-				TwitchUsername  string      `json:"twitch_username"`
-				Bio             string      `json:"bio"`
-				Emoji           interface{} `json:"emoji"`
-				AvatarURL       string      `json:"avatar_url"`
-				Modified        time.Time   `json:"modified"`
-				Created         time.Time   `json:"created"`
+				NamePhonetic    string      `json:"name_phonetic,omitempty"`
+				Pronouns        string      `json:"pronouns,omitempty"`
+				DiscordUsername string      `json:"discord_username,omitempty"`
+				TwitchUsername  string      `json:"twitch_username,omitempty"`
+				Bio             string      `json:"bio,omitempty"`
+				Emoji           interface{} `json:"emoji,omitempty"`
+				AvatarURL       string      `json:"avatar_url,omitempty"`
+				Modified        time.Time   `json:"modified,omitempty"`
+				Created         time.Time   `json:"created,omitempty"`
 			} `json:"members"`
 			Group  interface{} `json:"group"`
 			Wins   int         `json:"wins"`
@@ -34,15 +34,15 @@ type MatchResponse struct {
 			Members []struct {
 				ID              int         `json:"id"`
 				Name            string      `json:"name"`
-				NamePhonetic    string      `json:"name_phonetic"`
-				Pronouns        string      `json:"pronouns"`
-				DiscordUsername string      `json:"discord_username"`
-				TwitchUsername  string      `json:"twitch_username"`
-				Bio             interface{} `json:"bio"`
-				Emoji           interface{} `json:"emoji"`
-				AvatarURL       string      `json:"avatar_url"`
-				Modified        time.Time   `json:"modified"`
-				Created         time.Time   `json:"created"`
+				NamePhonetic    string      `json:"name_phonetic,omitempty"`
+				Pronouns        string      `json:"pronouns,omitempty"`
+				DiscordUsername string      `json:"discord_username,omitempty"`
+				TwitchUsername  string      `json:"twitch_username,omitempty"`
+				Bio             interface{} `json:"bio,omitempty"`
+				Emoji           interface{} `json:"emoji,omitempty"`
+				AvatarURL       string      `json:"avatar_url,omitempty"`
+				Modified        time.Time   `json:"modified,omitempty"`
+				Created         time.Time   `json:"created,omitempty"`
 			} `json:"members"`
 			Group  interface{} `json:"group"`
 			Wins   int         `json:"wins"`
@@ -64,16 +64,11 @@ type MatchResponse struct {
 			Number string `json:"number"`
 			Name   string `json:"name"`
 		} `json:"round"`
-		StartTime     time.Time `json:"start_time"`
-		TimeUntil     string    `json:"time_until"`
-		Scheduled     bool      `json:"scheduled"`
-		PrimaryCaster struct {
-			ID         int         `json:"id"`
-			Name       string      `json:"name"`
-			BioLink    interface{} `json:"bio_link"`
-			StreamLink string      `json:"stream_link"`
-		} `json:"primary_caster"`
-		SecondaryCasters []interface{} `json:"secondary_casters"`
+		StartTime        time.Time     `json:"start_time,omitempty"`
+		TimeUntil        string        `json:"time_until,omitempty"`
+		Scheduled        bool          `json:"scheduled,omitempty"`
+		PrimaryCaster    interface{}   `json:"primary_caster,omitempty"`
+		SecondaryCasters []interface{} `json:"secondary_casters,omitempty"`
 		Result           interface{}   `json:"result"`
 		VodLink          interface{}   `json:"vod_link"`
 	} `json:"results"`
