@@ -83,16 +83,23 @@ func CustomTeamSelection(w fyne.Window) *fyne.Container {
 	blueWLContainer := container.NewHBox(blueStandingsLabel, blueWins, blueLoss)
 	goldWLContainer := container.NewHBox(goldStandingsLabel, goldWins, goldLoss)
 
+	themeSelectLabel := widget.NewLabel("Select Theme")
+	themeSelect := widget.NewSelect(themes, func(theme string) {
+		selectedTheme = theme
+	})
+	themeSelect.SetSelected("default")
+	themeSelectContainer := container.NewHBox(themeSelectLabel, themeSelect)
 	saveButton := widget.NewButton("Start Scoreboard", func() {
 		log.Println("Scoreboard Starting")
 		blueTeam := Team{blueInput.Text, "avatar.png", 1, 1, Stats{0, 0, blueWinsInt, blueLossInt}}
 		goldTeam := Team{goldInput.Text, "avatar.png", 1, 1, Stats{0, 0, goldWinsInt, goldLossInt}}
 		s = Scoreboard{&blueTeam, &goldTeam, 0, 0, 0, 0, []ScoreboardSet{}}
 		StartScoreboard(w)
+		UpdateStaticRoute()
 	})
 	saveButton.Importance = widget.HighImportance
 
-	cont := container.NewVBox(label, blueInput, blueWLContainer, goldInput, goldWLContainer, saveButton)
+	cont := container.NewVBox(label, blueInput, blueWLContainer, goldInput, goldWLContainer, themeSelectContainer, saveButton)
 	return cont
 }
 
