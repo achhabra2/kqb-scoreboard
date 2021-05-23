@@ -7,7 +7,7 @@ import (
 	"github.com/rhysd/go-github-selfupdate/selfupdate"
 )
 
-const version = "0.9.5"
+const version = "0.9.6"
 
 func doSelfUpdate() bool {
 	v := semver.MustParse(version)

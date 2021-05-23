@@ -11,6 +11,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"reflect"
 )
 
 func GetBGLTeams() TeamsResponse {
@@ -66,7 +67,8 @@ func GetTeamInfo(c chan []Team) {
 }
 
 func GetBGLMatches() MatchResponse {
-	url := "https://api.beegame.gg/matches/?days=7&scheduled=true&limit=100"
+	// url := "https://api.beegame.gg/matches/?days=7&scheduled=true&limit=100"
+	url := "https://api.beegame.gg/matches/?round_is_current=true&limit=100"
 	method := "GET"
 
 	client := &http.Client{}
@@ -98,28 +100,30 @@ func GetBGLMatches() MatchResponse {
 
 func MatchesToTeamMap(matches MatchResponse) MatchMap {
 	matchMap := make(MatchMap)
-	
+
 	for _, match := range matches.Results {
-		title := formatTeamName(match.Away.Name) + " vs " + formatTeamName(match.Home.Name)
-		home := Team{
-			Name: match.Home.Name,
-			Img: KQBAvatarImage,
-			Stats: Stats{
-				MatchesWon:match.Home.Wins,
-				MatchesLost: match.Home.Losses,
-			},
-		}
+		if isNilFixed(match.Result) {
+			title := formatTeamName(match.Away.Name) + " vs " + formatTeamName(match.Home.Name)
+			home := Team{
+				Name: match.Home.Name,
+				Img:  KQBAvatarImage,
+				Stats: Stats{
+					MatchesWon:  match.Home.Wins,
+					MatchesLost: match.Home.Losses,
+				},
+			}
 
-		away := Team{
-			Name: match.Away.Name,
-			Img: KQBAvatarImage,
-			Stats: Stats{
-				MatchesWon:match.Away.Wins,
-				MatchesLost: match.Away.Losses,
-			},
-		}
+			away := Team{
+				Name: match.Away.Name,
+				Img:  KQBAvatarImage,
+				Stats: Stats{
+					MatchesWon:  match.Away.Wins,
+					MatchesLost: match.Away.Losses,
+				},
+			}
 
-		matchMap[title] = []Team{away, home}
+			matchMap[title] = []Team{away, home}
+		}
 	}
 
 	return matchMap
@@ -134,3 +138,14 @@ func GetMatchInfo(c chan MatchMap) {
 }
 
 type MatchMap map[string][]Team
+
+func isNilFixed(i interface{}) bool {
+	if i == nil {
+		return true
+	}
+	switch reflect.TypeOf(i).Kind() {
+	case reflect.Ptr, reflect.Map, reflect.Array, reflect.Chan, reflect.Slice:
+		return reflect.ValueOf(i).IsNil()
+	}
+	return false
+}
